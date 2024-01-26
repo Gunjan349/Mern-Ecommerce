@@ -73,7 +73,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="copyright flex py-5 border-t-2 border-lightpurple">
-            &copy; {new Date().getFullYear()}; Developed by GuNjaN GaRg
+            &copy; {new Date().getFullYear()}; Developed by GuNjaN
         </div>
       </footer>
     </>
