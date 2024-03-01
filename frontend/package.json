@@ -8,11 +8,12 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "axios": "^1.6.2",
+    "axios": "^1.6.7",
     "flowbite-react": "^0.7.2",
     "multi-range-slider-react": "^2.0.7",
     "react": "^18.2.0",
     "react-accessible-accordion": "^5.0.0",
+    "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-dropdown": "^1.11.0",
     "react-fast-marquee": "^1.6.2",
@@ -23,6 +24,9 @@
     "react-router-dom": "^6.20.1",
     "react-scripts": "5.0.1",
     "react-slider": "^2.0.6",
+    "react-spinners": "^0.13.8",
+    "react-toastify": "^10.0.4",
+    "uuid": "^9.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

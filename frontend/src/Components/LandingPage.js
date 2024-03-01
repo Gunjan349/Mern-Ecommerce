@@ -1,87 +1,64 @@
 import React from "react";
-import Corousel from "./Corousel";
-import Corousel2 from "./Corousel2";
-import Sidebar from "./Sidebar";
 import { Link } from "react-router-dom";
+import Navbar from "./Navbar";
+import { FaRegHeart } from "react-icons/fa6";
+import { IoCartOutline } from "react-icons/io5";
 import HomeMarquee from "./HomeMarquee";
 import BestSellers from "./BestSellers";
 import WomenWear from "./WomenWear";
-import MenWear from './MensWear';
-import SpecialProduct from "./SpecialProducts";
-import HomeAppliances from './HomeAppliances';
-import Toys from './Toys';
+import MenWear from "./MensWear";
+import BestProducts from "./BestProducts";
+import HomeAppliances from "./HomeAppliances";
+import Toys from "./Toys";
 import FeaturedCollection from "./FeaturedCollection";
-import Books from './Books'; 
+import Books from "./Books";
 import Mobiles from "./Mobiles";
 
 const LandingPage = () => {
-  const slides = [
-    "images/laptop.png",
-    "images/man.jpg",
-    "images/headphone.webp",
-    "images/makeup.jpg",
-    "images/womantop.jpg",
-    "images/oven.jpg",
-  ];
-
-  const slides2 = [
-    "images/makeup.jpg",
-    "images/womantop.jpg",
-    "images/oven.jpg",
-    "images/laptop.png",
-    "images/man.jpg",
-    "images/headphone.webp",
-  ];
-
   return (
     <>
-      <div className="home flex gap-24 md:gap-0">
-        <Sidebar />
+      <div>
+        <Navbar className="relative" />
 
-        <div className="corousels flex items-center gap-x-80 md:gap-x-2 lg:gap-20">
-          {/* corousel1 */}
-          <div className="corousel1 flex">
-            <div className="max-w-sm sm:max-w-md">
-              <Corousel autoslide={true}>
-                {slides.map((slide) => (
-                  <img src={slide} alt="image" className="rounded-full" />
-                ))}
-              </Corousel>
-              <Link
-                to="/"
-                className="buy1 absolute top-56 sm:top-64 p-3 rounded-xl bg-pink text-white duration-500 animate-bounce shadow-xl"
-              >
-                Buy Now
-              </Link>
+        <div className="absolute">
+          
+            <div className="w-screen">
+              <img src="images/fashion4.jpg" className="w-full" />
             </div>
-          </div>
-          {/* corousel2 */}
-          <div className="corousel2 flex mt-44 mr-[9%] sm:hidden ">
-            <div className="max-w-xs">
-              <Corousel2 autoslide={true}>
-                {slides2.map((slide2) => (
-                  <img src={slide2} alt="image" className="rounded-full" />
-                ))}
-              </Corousel2>
-              <Link
-                to="/"
-                className="absolute top-80  p-3 rounded-xl bg-pink text-white duration-500 animate-bounce shadow-xl"
-              >
-                Buy Now
-              </Link>
-            </div>
-          </div>
+         
         </div>
       </div>
-      <HomeMarquee/>
+      <div className="relative float-right mt-6 text-brown flex items-center gap-x-10 mr-5">
+        <Link className="wishlist" to="/wishist">
+          <FaRegHeart size={25} className="hover:scale-75 duration-500" />
+        </Link>
+        <Link className="cart" to="/cart">
+          <IoCartOutline size={35} className="hover:scale-75 duration-500" />
+        </Link>
+      </div>
+
+      <div className="home-heading relative  font-serif float-right my-48">
+        <p className="font-bold tracking-wide text-4xl">
+          Wear Confidence With Style
+        </p>
+        <p className="text-lg tracking-wide text-center mt-3">
+          Get all the trendy and affordable deals here.
+          <br /> Choose your fashion everyday with
+        </p>
+        <h3 className="text-brown underline underline-offset-4 text-center ">
+          nearYou
+        </h3>
+      </div>
+      <scrollToTop />
+      <HomeMarquee />
       <BestSellers />
-      <WomenWear />
       <MenWear />
-      <SpecialProduct />
-      <HomeAppliances />
+      <WomenWear />
+      <BestProducts />
+      <Books />
       <Toys />
       <FeaturedCollection />
-      <Books />
+      <HomeAppliances />
       <Mobiles />
     </>
   );

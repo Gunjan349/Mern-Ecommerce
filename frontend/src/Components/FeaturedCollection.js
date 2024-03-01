@@ -1,103 +1,180 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ReactStars from "react-rating-stars-component";
-import { FaRegHeart } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const FeaturedCollection = () => {
+  const navigate = useNavigate();
+  const [data, setdata] = useState([]);
+  const [likedProducts, setLikedProducts] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    const headers = { authorization: localStorage.getItem("token") };
+
+    axios
+      .get("http://localhost:3002/get-products", { headers })
+
+      .then((res) => {
+        setdata(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [refresh]);
+
+  useEffect(() => {
+    const _data = { userId: localStorage.getItem("userId") };
+    axios
+      .post("http://localhost:3002/get-wishlist", _data)
+      .then((res) => {
+        setLikedProducts(res.data.data.wishlist);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [refresh]);
+
+  const handleAddToCart = (productId) => {
+    const ProductId = productId;
+    const userId = localStorage.getItem("userId");
+
+    const _data = { productId: ProductId, userId };
+    axios
+      .post("http://localhost:3002/user-cart", _data)
+
+      .then((res) => {
+        if (res.data.code === 200) {
+          toast.success("Product added to cart.");
+          setRefresh(!refresh);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleWishlist = (productId) => {
+    const ProductId = productId;
+    const userId = localStorage.getItem("userId");
+
+    const _data = { productId: ProductId, userId };
+    axios
+      .post("http://localhost:3002/wishlist", _data)
+
+      .then((res) => {
+        if (res.data.code == 200) {
+          setRefresh(!refresh);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleProduct = (productId) => {
+    navigate("/product/" + productId);
+  };
+  const deleteWishlist = (productId) => {
+    const ProductId = productId;
+    const userId = localStorage.getItem("userId");
+
+    const _data = { productId: ProductId, userId };
+    axios
+      .post("http://localhost:3002/delete-wishlist", _data)
+
+      .then((res) => {
+        if (res.data.code === 200) {
+          setRefresh(!refresh);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
-      <div className="wrapper mx-16 lg:mx-8 mt-20">
+      <div className="wrapper mx-16 lg:mx-8 mt-20 sm:mx-3">
         <div className="heading font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
           <h4>Featured Collection</h4>
         </div>
-        <div className="image-wrapper">
-          <div className="boxes grid grid-flow-col gap-12 lg:gap-6 sm:grid-flow-row">
-            <Link
-              className="box1 flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5"
-              to="/"
-            >
-              <img
-                src="images/guitar1.jpg"
-                alt="img"
-                className="rounded-md  lg:w-52 "
-              />
-              <div className="content-body relative">
-                <div className="content-title text-2xl font-bold mb-3 md:mb-0 leading-10 lg:leading-7 lg:text-xl md:text-lg">
-                  Acoustic Guitar Special Discount
-                </div>
-                <div className="content-desc1 my-3 lg:my-1 xs:hidden">
-                  Medellin 38'' Acoustic Guitar with Matt finish
-                </div>
-                <div className="stars xs:hidden">
-                  <ReactStars
-                    count={5}
-                    size={28}
-                    value="3"
-                    edit={false}
-                    activeColor="#ffd700"
-                  />
-                </div>
-                <div className="leading-10">
-                  <div className="price text-lg text-red-600 sm:mt-0">$50</div>
-                  <div className="flex items-center gap-x-8  md:gap-x-4 mt-3 lg:mt-0">
-                    <FaRegHeart
-                      size={25}
-                      className="absolute right-0 bottom-0"
-                    />
-                    <Link className="bg-pink text-white px-2  md:px-1 rounded-lg hover:underline sm:mt-2 ">
-                      Add to cart
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </Link>
 
-            <Link
-              className="box1 flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5"
-              to="/"
-            >
-              <img
-                src="images/watch1.jpg"
-                alt="img"
-                className="rounded-md  lg:w-52 "
-              />
-              <div className="content-body relative">
-                <div className="content-title text-2xl font-bold mb-3 md:mb-0 leading-10 lg:leading-7 lg:text-xl md:text-lg">
-                  Acoustic Guitar Special Discount
-                </div>
-                <div className="content-desc1 my-3 lg:my-1 xs:hidden">
-                  Medellin 38'' Acoustic Guitar with Matt finish
-                </div>
-                <div className="stars xs:hidden">
-                  <ReactStars
-                    count={5}
-                    size={28}
-                    value="3"
-                    edit={false}
-                    activeColor="#ffd700"
-                  />
-                </div>
-                <div className="leading-10">
-                  <div className="price text-lg text-red-600 sm:mt-0">$50</div>
-                  <div className="flex items-center gap-x-8  md:gap-x-4 mt-3 lg:mt-0">
-                    <FaRegHeart
-                      size={25}
-                      className="absolute right-0 bottom-0"
-                    />
-                    <Link className="bg-pink text-white px-2  md:px-1 rounded-lg hover:underline sm:mt-2 ">
-                      Add to cart
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </Link>
-            
+        <div className="image-wrapper">
+          <div className="featured-collection grid grid-cols-2 gap-12 lg:gap-6">
+            {data &&
+              data.length > 0 &&
+              data.map((item, index) => {
+                if (item.rating === 5 && item.price > 4000) {
+                  return (
+                    <div className="relative flex bg-white h-96 rounded-md p-5 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
+                      <img
+                        src={`http://localhost:3002/${item.image}`}
+                        alt="img"
+                        className="rounded-md  lg:w-52"
+                        onClick={() => handleProduct(item._id)}
+                      />
+
+                      <div className="content-body ml-6">
+                        <div className="content-title text-xl font-bold mb-3 md:mb-0 leading-10 lg:leading-7 lg:text-xl">
+                          {item.Name}
+                        </div>
+                        <div className="content-desc my-3 lg:my-1 xs:hidden">
+                          {item.description}
+                        </div>
+                        <div className="stars">
+                          <ReactStars
+                            count={5}
+                            size={28}
+                            value={item.rating}
+                            edit={false}
+                            activeColor="#ffd700"
+                          />
+                        </div>
+                        <div className="leading-10">
+                          <div className="price font-bold text-lg text-red-600 ">
+                            Rs.{item.price}/-
+                          </div>
+                          <div>
+                            <div className="absolute bottom-5 right-5">
+                              {likedProducts.find(
+                                (likedItems) => likedItems._id === item._id
+                              ) ? (
+                                <FaHeart
+                                  size={30}
+                                  className={`text-red-600`}
+                                  onClick={(e) => {
+                                    deleteWishlist(item._id);
+                                  }}
+                                />
+                              ) : (
+                                <FaHeart
+                                  size={30}
+                                  onClick={(e) => {
+                                    handleWishlist(item._id);
+                                  }}
+                                />
+                              )}
+                            </div>
+
+                            <button
+                              className="bg-brown text-white px-2 rounded-lg hover:underline mt-3 "
+                              onClick={() => {
+                                handleAddToCart(item._id);
+                              }}
+                            >
+                              Add to cart
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              })}
           </div>
-          <div className="see-more mt-5 text-sky-800 text-xl">
-              <Link to="/collection" className="hover:text-pink ">
-                Explore Now
-              </Link>
-            </div>
         </div>
       </div>
     </>

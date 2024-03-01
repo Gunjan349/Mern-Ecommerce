@@ -1,74 +1,160 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { CiHeart } from "react-icons/ci";
-import { RxCross2 } from "react-icons/rx";
-import { FaCheck } from "react-icons/fa6";
-
+import { GoArrowLeft } from "react-icons/go";
+import axios from "axios";
+import ReactStars from "react-rating-stars-component";
 
 const Wishlist = () => {
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    const data = { userId: localStorage.getItem("userId") };
+
+    axios
+      .post("http://localhost:3002/get-wishlist", data)
+
+      .then((res) => {
+       
+        setData(res.data.data.wishlist);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [refresh]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
+
+  const handleDelete = (productId) => {
+    const ProductId = productId;
+
+    const userId = localStorage.getItem("userId");
+    const _data = { productId: ProductId, userId: userId };
+    axios
+      .post("http://localhost:3002/delete-wishlist", _data)
+      .then((res) => {
+        
+        if (res.data.code == 200) {
+          setRefresh(!refresh);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleAddToCart = (productId) => {
+    const ProductId = productId;
+    const userId = localStorage.getItem("userId");
+ 
+    const _data = { productId: ProductId, userId };
+    axios
+      .post("http://localhost:3002/user-cart", _data)
+
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.code === 200) {
+          navigate("/cart");
+          setRefresh(!refresh);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <div>
         <div className="heading text-center mt-10 bg-purple text-white py-7 flex flex-col gap-y-3">
           <div className="flex justify-center">
-            <CiHeart size={35}/>
+            <CiHeart size={35} />
           </div>
           <h1 className="text-xl font-bold tracking-wider">Your Wishlist</h1>
-         <div>
-         <p>
-            If you've added products to your wishist , you can find them below
-          </p>
-          <p>and purchase them right away.</p>
-         </div>
+          <div>
+            <p>
+              If you've added products to your wishist , you can find them below
+            </p>
+            <p>and purchase them right away.</p>
+          </div>
         </div>
-        <div className="wishlist-content mt-12 mx-44">
-            <h1 className="font-bold text-lg tracking-wide">Products Wishlisted</h1>
-            <div className="wishlist-container shadow-lg bg-white grid grid-cols-7 p-4 rounded-md mt-10 sm:grid-cols-6">
-            <div className="flex flex-col gap-y-16">
-                <h1 className="invisible">Remove</h1>
-                <div className="flex justify-center">
-                <RxCross2 size={20}/>
-                </div>
-                <div className="flex justify-center">
-                <RxCross2 size={20}/>
-                </div>
-            </div>
-            <div className="flex flex-col gap-y-6">
-                <h1 className="invisible">Image</h1>
-                <img src="images/guitar1.jpg" className="flex justify-center h-20"></img>
-                <img src="images/guitar1.jpg" className="flex justify-center h-20"></img>
-            </div>
-            <div className="flex flex-col gap-y-16">
-                <h1 className="flex justify-center font-bold text-lg">Name</h1>
-                <p className="flex justify-center">Guitar</p>
-                <p className="flex justify-center">Guitar</p>
-            </div>
-            <div className="flex flex-col gap-y-16">
-                <h1 className="flex justify-center font-bold text-lg">Price</h1>
-                <p className="flex justify-center">$100</p>
-                <p className="flex justify-center">$100</p>
-            </div>
-            <div className="date flex flex-col gap-y-16 sm:hidden">
-                <h1 className="flex justify-center font-bold text-lg flex-wrap">Date
+
+        <div className=" mt-12 mx-16 xs:mx-6">
+          <div className="image-wrapper ">
+            <div className="wishlist-content boxes grid  mt-12 grid-cols-2 gap-12 lg:gap-6 ">
+              {data.length === 0 && (
+                <h1 className=" text-2xl font-bold text-purple">
+                  Hmm, can't find any product
                 </h1>
-                <p className="flex justify-center flex-wrap">Jan 22 ,24</p>
-                <p className="flex justify-center flex-wrap">Jan 22 ,24</p>
+              )}
+              {data.map((item, index) => {
+                return (
+                  <div className="box1 flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
+                    <img
+                      src={`http://localhost:3002/${item.image}`}
+                      alt="img"
+                      className="rounded-md  lg:w-52 sm:w-44"
+                    />
+
+                    <div className="content-body relative ml-5">
+                      <div className="content-title text-2xl font-bold mb-3 md:mb-0 leading-10 lg:leading-7 lg:text-xl md:text-lg">
+                        {item.Name}
+                      </div>
+                      <div className="content-desc1 my-3 lg:my-1 xs:hidden">
+                        {item.description}
+                      </div>
+                      <div className="stars">
+                          <ReactStars
+                            count={5}
+                            size={28}
+                            value={item.rating}
+                            edit={false}
+                            activeColor="#ffd700"
+                          />
+                        </div>
+                      <div className="stars xs:hidden"></div>
+                      <div className="leading-10">
+                        <div className="price text-lg text-red-600 sm:mt-0">
+                          Rs.{item.price}/-
+                        </div>
+
+                        <div className="flex mt-6 gap-x-8 sm:mt-1 sm:flex-col">
+                          <button
+                            className="bg-brown text-white px-2  md:px-1 rounded-lg hover:underline sm:mt-2 "
+                            onClick={() => {
+                              handleDelete(item._id);
+                            }}
+                          >
+                            Remove
+                          </button>
+                          <button
+                            className="bg-brown text-white px-2  md:px-1 rounded-lg hover:underline sm:mt-2 "
+                            onClick={() => {
+                              handleAddToCart(item._id);
+                            }}
+                          >
+                            Add to cart
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="flex flex-col gap-y-16">
-                <h1 className="flex justify-center font-bold text-lg flex-wrap">Stock</h1>
-                <div className="flex justify-center text-pink">
-                    <FaCheck size={20} />
-                </div>
-                <div className="flex justify-center text-pink">
-                    <FaCheck size={20} />
-                </div>
-                
-            </div>
-            <div className="flex flex-col gap-y-16">
-                <h1 className="invisible">Add</h1>
-                <button className=" text-pink font-bold">ADD TO CART</button>
-                <button className=" text-pink font-bold">ADD TO CART</button>
-            </div>
-            </div>
+            <Link to="/" className="flex gap-x-3 mt-10 items-center">
+              <GoArrowLeft size={25} className="text-brown"/>
+              <h1 className="text-brown text-xl font-bold">Continue Shopping</h1>
+            </Link>
+          </div>
         </div>
       </div>
     </>

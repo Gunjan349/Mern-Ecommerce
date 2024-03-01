@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 
 module.exports.authorization = async (req ,res ,next) => {
-    console.log(req.headers.authorization , "4")
+  
 
     try{
         if(!req.headers.authorization){
@@ -10,9 +10,8 @@ module.exports.authorization = async (req ,res ,next) => {
         
     
         const decodeduser = await jwt.verify(req.headers.authorization , 'keep silence')
-        console.log(decodeduser,'11')
-        console.log(Date.now()/1000 , decodeduser.exp)
-
+        c
+        
         if(Date.now()/1000 >= decodeduser.exp){
             return res.send({code : 4030 , message : 'token expired!!'})
         }

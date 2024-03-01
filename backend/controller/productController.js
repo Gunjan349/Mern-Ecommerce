@@ -1,13 +1,5 @@
-const { query } = require("express");
-const userModel = require("../Models/userModel");
 const productModel = require("../Models/productModel");
 const slugify = require("slugify");
-const validateMongoDBId = require("./utils/validateMongoDBid");
-const fs = require("fs");
-const {
-  cloudinaryUploadImg,
-  cloudinaryDeleteImg,
-} = require("./utils/cloudinary");
 
 // create product
 
@@ -16,18 +8,38 @@ module.exports.addProduct = async (req, res) => {
     req.body.url = slugify(req.body.Name);
   }
 
-  const newProduct = new productModel(req.body);
+  const image = req.file.path;
+  const Name = req.body.Name;
+  const description = req.body.description;
+  const price = req.body.price;
+  const quantity = req.body.quantity;
+  const category = req.body.category;
+  const rating = req.body.rating;
+  const colors = JSON.parse(req.body.colors);
+  const sizes = JSON.parse(req.body.sizes);
 
-  if (req.permissions.indexOf("view home-page") === -1) {
-    return res.send({ code: 401, message: "unauthenticated" });
-  }
+  const newProduct = new productModel({
+    image: image,
+    description: description,
+    price: price,
+    Name: Name,
+    quantity: quantity,
+    category: category,
+    rating: rating,
+    colors: colors,
+    sizes: sizes,
+  });
 
   const isSaved = await newProduct.save();
 
   if (isSaved) {
-    res.send("saved");
+    res.send({
+      code: 200,
+      message: "Product saved successfully",
+      data: newProduct,
+    });
   } else {
-    res.send("not saved ");
+    res.send("Product not saved");
   }
 };
 
@@ -42,39 +54,6 @@ module.exports.getProducts = async (req, res) => {
 
   let query = productModel.find(queryObj2);
 
-  // sorting
-  let query1 = productModel.find();
-
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(",").join(" ");
-    query = query1.sort(sortBy);
-  } else {
-    query = query1.sort("-createdAt");
-  }
-
-  //  limiting the fields
-
-  if (req.query.fields) {
-    const fields = req.query.fields.split(",").join(" ");
-    query = query.select(fields);
-  } else {
-    query = query.select("-__v");
-  }
-
-  // pagination
-
-  const page = req.query.page;
-  const limit = req.query.limit;
-  const skip = (page - 1) * limit;
-  query = query.skip(skip).limit(limit);
-
-  if (req.query.page) {
-    const productCount = await productModel.countDocuments();
-    if (skip >= productCount) {
-      return res.send({ code: 404, message: "page does not exists" });
-    }
-  }
-
   const data = await query;
 
   if (data.length > 0) {
@@ -83,6 +62,100 @@ module.exports.getProducts = async (req, res) => {
     res.send({ code: 404, message: "data not found" });
   } else {
     res.send({ code: 500, message: "server error" });
+  }
+};
+
+// category
+
+module.exports.category = async (req, res) => {
+  const catName = req.query.catName;
+
+  const query = await productModel.find({ category: catName });
+
+  if (query) {
+    return res.send({ code: 200, message: "Product's category", data: query });
+  } else {
+    return res.send({ code: 404, message: "Product not found" });
+  }
+};
+
+// search
+
+module.exports.searchProducts = async (req, res) => {
+  const search = req.query.search;
+  const query = await productModel.find({
+    $or: [
+      { Name: { $regex: search, $options: "i" } },
+      { description: { $regex: search, $options: "i" } },
+      { category: { $regex: search, $options: "i" } },
+    ],
+  });
+
+  if (query) {
+    return res.send({
+      code: 200,
+      message: "Product has been found",
+      data: query,
+    });
+  } else {
+    return res.send({ code: 404, message: "Product not found" });
+  }
+};
+
+// color
+
+module.exports.color = async (req, res) => {
+  const colour = await productModel.find({
+    colors: { $elemMatch: { color: req.body.color } },
+  });
+
+  if (colour) {
+    return res.send({ code: 200, message: "Products found", data: colour });
+  } else {
+    return res.send({ code: 404, message: "Products not found" });
+  }
+};
+
+// size
+
+module.exports.size = async (req, res) => {
+  const sizes = await productModel.find({
+    sizes: { $elemMatch: { value: req.body.size } },
+  });
+
+  if (sizes) {
+    return res.send({ code: 200, message: "Products found", data: sizes });
+  } else {
+    return res.send({ code: 404, message: "Products not found" });
+  }
+};
+
+// category color
+
+module.exports.categoryColor = async (req, res) => {
+  const colour = await productModel.find({
+    category: req.body.category,
+    colors: { $elemMatch: { color: req.body.color } },
+  });
+
+  if (colour) {
+    return res.send({ code: 200, message: "Products found", data: colour });
+  } else {
+    return res.send({ code: 404, message: "Products not found" });
+  }
+};
+
+// category size
+module.exports.categorySize = async (req, res) => {
+  const sizes = await productModel.find({
+    category: req.body.category,
+    sizes: { $elemMatch: { value: req.body.size } },
+  });
+
+  if (sizes) {
+    return res.send({ code: 200, message: "Products found", data: sizes });
+  } else {
+    return res.send({ code: 404, message: "Products not found" });
   }
 };
 
@@ -140,128 +213,8 @@ module.exports.updateProducts = async (req, res) => {
 
 // get single product
 module.exports.getSingleProduct = async (req, res) => {
-  console.log(req.params, "137");
-  let data = await productModel.findById(req.params.id);
+  let data = await productModel.findById(req.params.id).populate("colors");
   if (data) {
-    res.send({ code: 200, message: "by id success", data: data });
-  }
-};
-
-// delete products
-
-module.exports.deleteProducts = async (req, res) => {
-  const ids = req.body;
-
-  if (req.permissions.indexOf("delete products") === -1) {
-    return res.send({ code: 401, message: "unauthenticated" });
-  }
-
-  const response = await productModel.deleteMany({ _id: { $in: ids } });
-
-  if (response) {
-    res.send({ code: 200, message: "deleted", data: response });
-  } else {
-    res.send({ code: 500, message: "not deleted" });
-  }
-};
-
-// total ratings
-module.exports.rating = async (req, res) => {
-  const { _id } = req.user;
-  const { star, productId, comment } = req.body;
-  try {
-    const product = await productModel.findById(productId);
-    let alreadyRated = product.ratings.find(
-      (userId) => userId.postedby.toString() === _id.toString()
-    );
-    if (alreadyRated) {
-      const updateRatings = await productModel.updateOne(
-        {
-          ratings: { $elemMatch: alreadyRated },
-        },
-        {
-          $set: { "ratings.$.star": star, "ratings.$.comment": comment },
-        },
-        {
-          new: true,
-        }
-      );
-    } else {
-      const rateproduct = await productModel.findByIdAndUpdate(
-        productId,
-        {
-          $push: {
-            ratings: {
-              star: star,
-              postedby: _id,
-              comment: comment,
-            },
-          },
-        },
-        {
-          new: true,
-        }
-      );
-    }
-    const getAllratings = await productModel.findById(productId);
-    let totalrating = getAllratings.ratings.length;
-    let sumofratings = getAllratings.ratings
-      .map((item) => item.star)
-      .reduce((prev, curr) => prev + curr, 0);
-    let actualRating = Math.round(sumofratings / totalrating);
-    let finalproduct = await productModel.findByIdAndUpdate(
-      productId,
-      {
-        totalrating: actualRating,
-      },
-      {
-        new: true,
-      }
-    );
-    return res.send({
-      code: 200,
-      message: "total ratings",
-      data: finalproduct,
-    });
-  } catch {
-    return res.send({ code: 400, message: "not rated successfully" });
-  }
-};
-
-// upload images
-module.exports.uploadImages = async (req, res) => {
-  try {
-    const uploader = (path) => cloudinaryUploadImg(path, "images");
-    const urls = [];
-    const files = req.files;
-    for (const file of files) {
-      const { path } = file;
-      const newpath = await uploader(path);
-      urls.push(newpath);
-      fs.unlinkSync(path);
-    }
-    const images = urls.map((file) => {
-      return file;
-    });
-    return res.send({ message: "images", data: images });
-  } catch {
-    return res.send({
-      code: 400,
-      message: "images not uploaded",
-    });
-  }
-};
-
-// delete images
-module.exports.deleteImages = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const deleted = cloudinaryDeleteImg(id, "images");
-    return res.send({ message: "images deleted" });
-  } catch {
-    return res.send({
-      code: 400,
-      message: "images not uploaded",
-    });
+    res.send({ code: 200, message: "Product found", data: data });
   }
 };

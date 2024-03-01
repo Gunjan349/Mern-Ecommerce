@@ -1,10 +1,29 @@
-import React from "react";
+import {React , useState} from "react";
 import { IoHomeSharp } from "react-icons/io5";
 import { FaPhoneAlt } from "react-icons/fa";
 import { IoMdMail } from "react-icons/io";
 import { FaInfoCircle } from "react-icons/fa";
+import axios from 'axios';
+import {toast } from "react-toastify";
 
 const Contact = () => {
+
+  const [userName , setUserName] = useState("");
+  const [email , setEmail] = useState("");
+  const [message , setmessage] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const data = {userName : userName, email : email, message : message}
+    axios.post("http://localhost:3002/contact", data)
+    .then(res => {
+      if(res.data.code === 200){
+         toast.success("Message sent successfully.")
+      }
+    })
+    .catch(err => console.log(err))
+  }
+
     return (
     <>
       <div>
@@ -14,21 +33,18 @@ const Contact = () => {
         <div className="contact-form flex p-7 gap-x-20 bg-white mt-10  mx-52 rounded-md">
           <div className="first-form w-96">
             <h1 className="font-bold text-xl">Contact Us</h1>
-            <form action="" className="flex flex-col gap-7 mt-10">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-7 mt-10">
               <div>
-                <input type="text" className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500" placeholder="Name" required/>
+                <input type="text" className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500" value={userName} onChange={(e) => setUserName(e.target.value)} placeholder="Name" required/>
               </div>
               <div>
-                <input type="email" className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500" placeholder="Email"/>
+                <input type="email" className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email"/>
               </div>
               <div>
-                <input type="tel" className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500" placeholder="Mobile"/>
+                <textarea className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500" cols="30" rows="4" placeholder="Comment" value={message} onChange={(e) => setmessage(e.target.value)}></textarea>
               </div>
               <div>
-                <textarea className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500" cols="30" rows="4" placeholder="Comment"></textarea>
-              </div>
-              <div>
-                <button className="bg-pink px-5 py-3 rounded-full text-white hover:bg-lightpurple">Submit</button>
+                <button className="bg-brown px-5 py-3 rounded-full text-white hover:bg-lightpurple" type="submit">Submit</button>
               </div>
             </form>
           </div>

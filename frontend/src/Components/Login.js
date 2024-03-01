@@ -1,8 +1,33 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [userEmail , setUserEmail] =useState('');
+  const [userPassword , setUserPassword] =useState('');
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    const data = {email : userEmail , password : userPassword}
+    axios.post("http://localhost:3002/login" , data)
+    .then((res) =>{
+      toast.success(res.data.message)
+      if(res.data.token){
+        navigate("/");
+        localStorage.setItem("token" , res.data.token);
+        localStorage.setItem("userId" , res.data.user._id);
+        localStorage.setItem("user" , JSON.stringify(res.data.user));
+        localStorage.setItem("rights" , JSON.stringify(res.data.user.roles));
+      }
+    })
+    .catch((err) =>{
+       console.log(err);
+ 
+    })
+  }
+
   return (
     <>
       <div className="text-center">
@@ -16,7 +41,11 @@ const Login = () => {
                     type="email"
                     className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500"
                     placeholder="Email"
-                    name="email"
+                   
+                    value={userEmail}
+                    onChange={(e) =>{
+                      setUserEmail(e.target.value)
+                    }}
                   />
                 </div>
                 <div>
@@ -25,6 +54,10 @@ const Login = () => {
                     className="form-control bg-lightgrey border border-gray-400 p-2 rounded-md text-black w-full focus:outline-gray-500 focus:ring-gray-500"
                     placeholder="Password"
                     name="password"
+                    value={userPassword}
+                    onChange={(e) =>{
+                      setUserPassword(e.target.value)
+                    }}
                   />
                 </div>
               </div>
@@ -32,12 +65,12 @@ const Login = () => {
                 <Link to="/forgot-password">Forgot Password?</Link>
               </div>
               <div className="flex gap-x-7 justify-center">
-                <button className="text-white bg-pink rounded-lg hover:bg-lightpurple py-2 px-3">
+                <button className="text-white bg-brown rounded-lg hover:bg-lightpurple py-2 px-3" onClick={handleSubmit}>
                   Login
                 </button>
                 <Link
                   to="/signup"
-                  className="text-white bg-lightpurple rounded-lg hover:bg-pink py-2 px-3"
+                  className="text-white bg-lightpurple rounded-lg hover:bg-brown py-2 px-3"
                 >
                   Signup
                 </Link>

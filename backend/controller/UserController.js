@@ -1,13 +1,10 @@
 const userModel = require("../Models/userModel");
 const productModel = require("../Models/productModel");
 const cartModel = require("../Models/cartModel");
-const couponModel = require("../Models/couponModel");
-const orderModel = require("../Models/orderModel");
 const jwt = require("jsonwebtoken");
 const rolesModel = require("../Models/RolesModel");
 const validateMongoDBId = require("./utils/validateMongoDBid");
-const { sendEmail } = require("./emailController");
-const crypto = require("crypto");
+const nodemailer = require("nodemailer");
 const uniqid = require("uniqid");
 
 // Create user (signup)
@@ -23,7 +20,7 @@ module.exports.signUp = async (req, res) => {
     "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/";
   const findUser = await userModel.findOne({ email: email });
 
-  const roleData = await rolesModel.findOne({ role: type });
+  const roleData = await rolesModel.findOne({ role : type });
   console.log(roleData);
   const roles = [roleData._id];
 
@@ -49,7 +46,7 @@ module.exports.signUp = async (req, res) => {
     });
     const savedUser = await newUser.save();
     if (savedUser) {
-      res.send({ code: 200, message: "saved" });
+      res.send({ code: 200, message: "User saved" });
     } else {
       res.send({ code: 500, message: "server error" });
     }
@@ -59,13 +56,11 @@ module.exports.signUp = async (req, res) => {
 // login user
 
 module.exports.login = async (req, res) => {
-  const Name = req.body.Name;
+  console.log(req.body)
   const password = req.body.password;
   const email = req.body.email;
 
-  if (!Name) {
-    return res.send({ code: 400, message: "Name required" });
-  } else if (!password) {
+  if (!password) {
     return res.send({ code: 400, message: "password required" });
   } else if (!email) {
     return res.send({ code: 400, message: "email required" });
@@ -75,20 +70,9 @@ module.exports.login = async (req, res) => {
       .populate("roles");
 
     if (isNameExists) {
-      if (await isNameExists.isPasswordMatch(password)) {
-        // cookies
-        const refreshToken = jwt.sign(
-          {
-            id: isNameExists._id,
-          },
-          "keep silence",
-          { expiresIn: "3d" }
-        );
-        res.cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          maxAge: 72 * 60 * 60 * 1000,
-        });
-
+      if (isNameExists.password === password) {
+        
+       
         // token
         const token = jwt.sign(
           {
@@ -99,11 +83,11 @@ module.exports.login = async (req, res) => {
             roles: isNameExists.roles,
           },
           "keep silence",
-          { expiresIn: "10h" }
+          { expiresIn: "1h" }
         );
         return res.send({
           code: 200,
-          message: "login success",
+          message: "Successfully logged in.",
           token: token,
           user: isNameExists,
         });
@@ -116,7 +100,7 @@ module.exports.login = async (req, res) => {
   }
 };
 
-// logout
+
 
 // update user
 
@@ -147,30 +131,6 @@ module.exports.updateUser = async (req, res) => {
   }
 };
 
-// save user address
-
-module.exports.saveAddress = async (req, res, next) => {
-  const { _id } = req.user;
-  validateMongoDBId(_id);
-  try {
-    const updateAddress = await userModel.findByIdAndUpdate(
-      _id,
-      {
-        address: req?.body?.address,
-      },
-      {
-        new: true,
-      }
-    );
-    return res.send({
-      code: 200,
-      message: "address saved successfully",
-      data: updateAddress,
-    });
-  } catch {
-    return res.send({ code: 500, message: "server error" });
-  }
-};
 
 // get all users
 
@@ -198,66 +158,6 @@ module.exports.getSingleUser = async (req, res) => {
   }
 };
 
-// delete user
-
-module.exports.deleteUser = async (req, res) => {
-  const email = req.body.email;
-  const findUser = await userModel.findOne({ email: email });
-  if (findUser) {
-    const deleteUser = await userModel.findByIdAndDelete(findUser._id);
-    return res.send({ code: 200, message: "user deleted", data: deleteUser });
-  } else {
-    return res.send({ code: 400, message: "user not found" });
-  }
-};
-
-// block user
-
-module.exports.blockUser = async (req, res) => {
-  const email = req.body.email;
-  const findUser = await userModel.findOne({ email: email });
-  validateMongoDBId(_id);
-  if (findUser) {
-    const blockUser = await userModel.findOneAndUpdate(
-      findUser._id,
-      {
-        isBlocked: true,
-      },
-      {
-        new: true,
-      }
-    );
-    return res.send({ code: 200, message: "user blocked", data: blockUser });
-  } else {
-    return res.send({ code: 400, message: "user not found" });
-  }
-};
-
-// unblock user
-
-module.exports.unblockUser = async (req, res) => {
-  const email = req.body.email;
-  const findUser = await userModel.findOne({ email: email });
-  validateMongoDBId(_id);
-  if (findUser) {
-    const unblockUser = await userModel.findOneAndUpdate(
-      findUser._id,
-      {
-        isBlocked: false,
-      },
-      {
-        new: true,
-      }
-    );
-    return res.send({
-      code: 200,
-      message: "user unblocked",
-      data: unblockUser,
-    });
-  } else {
-    return res.send({ code: 400, message: "user not found" });
-  }
-};
 
 // update password
 
@@ -279,105 +179,96 @@ module.exports.updatePassword = async (req, res) => {
   }
 };
 
-// forget password token
+// forget password 
 
-module.exports.forgotPasswordToken = async (req, res) => {
-  const { email } = req.body;
-  const user = await userModel.findOne({ email });
-  if (!user) {
-    return res.send({ code: 404, message: "user not found for this email" });
+module.exports.forgotPassword = async (req, res) => {
+  const _otp = Math.floor(100000 + Math.random() * 900000);
+  
+  const user = await userModel.findOne({ email: req.body.email });
+  
+  if(!user){
+    res.send({code : 500 , message : 'user not found'});
   }
-  try {
-    const token = await user.createpasswordResetToken();
-    await user.save();
-    const resetURL = `hi , follow this link to reset password . this link is valid for 10 minutes. <a href='http://localhost:3000/user/reset-password/${token}'>click here </a>`;
-    const data = {
-      to: email,
-      subject: "forgot password link",
-      text: "hey user",
-      htm: resetURL,
-    };
-    sendEmail(data);
-    return res.send({ code: 200, message: "token created", token: token });
-  } catch (err) {
-    return res.send(err);
+  else{
+    const updateData = await userModel.findOneAndUpdate({email : req.body.email} , {
+      otp : _otp
+    } , {
+      new : true
+    })
+
+    await updateData.save();
   }
+  
+
+  let transporter = nodemailer.createTransport({
+    service : "gmail",
+    auth : {
+      user : "gunjangarg349@gmail.com",
+      pass : "vejr drkb xbvk pfyn"
+    }
+  }) 
+
+  let info = transporter.sendMail({
+    from : "gunjangarg349@gmail.com",
+    to : req.body.email,
+    subject : "Reset Password",
+    text : `Your One-time password is ${_otp}`
+  })
+
+  if(info){
+    res.send({code : 200, message : 'email sent'});
+  }
+  else{
+    res.send({code : 400, message : 'email not sent'});
+  }
+
+ 
+  
 };
 
 // reset password
 
 module.exports.resetPassword = async (req, res) => {
-  const { password } = req.body;
-  const { token } = req.params;
-  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-  const user = await userModel.findOne({
-    passwordResetToken: hashedToken,
-    passwordResetExpires: { $gt: Date.now() },
-  });
-  if (!user) {
-    return res.send({ code: 400, message: "token expired" });
-  }
-  user.password = password;
-  user.passwordResetToken = undefined;
-  user.passwordResetExpires = undefined;
-  await user.save();
-  return res.send({ data: user });
+   
+  userModel.findOne({otp : req.body.otp}).then(result => {
+    console.log(result)
+    userModel.updateOne({email : result.email}, {password : req.body.password})
+    .then(result => { 
+      res.send({code : 200, message: "password updated"})
+    })
+    .catch(err => {
+      res.send({code : 500, message:"server error"})
+    })
+  })
+
+  .catch(err =>{
+    res.send({code : 500, message:"Wrong OTP"})
+  })
 };
 
 // user cart
 
 module.exports.userCart = async (req, res) => {
-  const { cart } = req.body;
-  const { _id } = req.user;
-  validateMongoDBId(_id);
-  try {
-    let products = [];
-    const user = await userModel.findById(_id);
-
-    // if user already have a cart then update it
-    const alreadyExistCart = await cartModel.findOne({ orderBy: user._id });
-    if (alreadyExistCart) {
-      alreadyExistCart.remove();
+  const update = await userModel.updateOne(
+    { _id: req.body.userId },
+    {
+      $addToSet: { cart: req.body.productId },
     }
+  );
 
-    for (let i = 0; i < cart.length; i++) {
-      let object = {};
-      object.product = cart[i]._id;
-      object.count = cart[i].count;
-      object.color = cart[i].color;
-      let getPrice = await productModel
-        .findById(cart[i]._id)
-        .select("price")
-        .exec();
-      object.price = getPrice.price;
-      products.push(object);
-    }
-
-    let cartTotal = 0;
-    for (let i = 0; i < products.length; i++) {
-      cartTotal = cartTotal + products[i].price * products[i].count;
-    }
-
-    let newCart = await new cartModel({
-      products,
-      cartTotal,
-      orderBy: user._id,
-    }).save();
-
-    return res.send({ code: 200, message: "cart updated", data: newCart });
-  } catch {
-    return res.send({ code: 500, message: "server error cart not updated" });
+  if (update) {
+    return res.send({ code: 200, message: "product added to cart" });
+  } else {
+    return res.send({ code: 400, message: "product not added to cart" });
   }
 };
 
 // get cart
 
 module.exports.getcart = async (req, res) => {
-  const { _id } = req.user;
+  const id = req.body.userId;
   try {
-    const cart = await cartModel
-      .findOne({ orderBy: _id })
-      .populate("products.product");
+    const cart = await userModel.findOne({ _id: id }).populate("cart");
     if (cart) {
       return res.send({ code: 200, message: "cart found", data: cart });
     }
@@ -386,197 +277,65 @@ module.exports.getcart = async (req, res) => {
   }
 };
 
-// empty cart
+// delete cart
 
-module.exports.emptycart = async (req, res) => {
-  const { _id } = req.user;
-  validateMongoDBId(_id);
-  try {
-    const user = await userModel.findById(_id);
-    const cart = await cartModel.findOneAndRemove({ orderBy: user._id });
-    if (cart) {
-      return res.send({ code: 200, message: "cart removed", data: cart });
-    }
-  } catch {
-    return res.send({ code: 500, message: "cart not removed" });
+module.exports.deleteCart = async (req, res) => {
+  const deleteItem = await userModel.updateOne(
+    { _id: req.body.userId },
+    { $pull: { cart: req.body.productId } }
+  );
+
+  if (deleteItem) {
+    return res.send({ code: 200, message: "product removed from cart" });
+  } else {
+    return res.send({ code: 400, message: "product not removed from cart" });
   }
 };
+
 
 // add to wishlist
 
 module.exports.addToWishlist = async (req, res) => {
-  const { _id } = req.user;
-  const { productId } = req.body;
-  try {
-    const user = await userModel.findById(_id);
-    const alreadyAdded = user.wishlist.find(
-      (id) => id.toString() === productId
-    );
-    if (alreadyAdded) {
-      let user = await userModel.findByIdAndUpdate(
-        _id,
-        {
-          $pull: { wishlist: productId },
-        },
-        {
-          new: true,
-        }
-      );
-      return res.send({
-        code: 200,
-        message: "removed from wishlist",
-        data: user,
-      });
-    } else {
-      let user = await userModel.findByIdAndUpdate(
-        _id,
-        {
-          $push: { wishlist: productId },
-        },
-        {
-          new: true,
-        }
-      );
-      return res.send({ code: 200, message: "added to wishlist", data: user });
+  const update = await userModel.updateOne(
+    { _id: req.body.userId },
+    {
+      $addToSet: { wishlist: req.body.productId },
     }
-  } catch {
-    return res.send({ code: 400, message: "cannot be added to wishlist" });
+  );
+
+  if (update) {
+    return res.send({
+      code: 200,
+      message: "product added to WISHLIST",
+      data: update,
+    });
+  } else {
+    return res.send({ code: 400, message: "product not added to wishlist" });
   }
 };
 
 //   get wishlist
 module.exports.getWishlist = async (req, res) => {
-  const { _id } = req.user;
+  const id = req.body.userId;
   try {
-    const user = await userModel.findById(_id).populate("wishlist");
-    return res.send({
-      code: 200,
-      message: "wishlist found",
-      data: user,
-    });
+    const wishlist = await userModel.findOne({ _id: id }).populate("wishlist");
+    if (wishlist) {
+      return res.send({ code: 200, message: "wishlist found", data: wishlist });
+    }
   } catch {
-    return res.send({ code: 400, message: "wishlist not found" });
+    return res.send({ code: 500, message: "wishlist not found" });
   }
 };
 
-// apply coupon
-module.exports.applyCoupon = async (req, res) => {
-  const { coupon } = req.body;
-  const { _id } = req.user;
-  const validCoupon = await couponModel.findOne({ name: coupon });
-
-  if (validCoupon === null) {
-    return res.send({ code: 400, message: "coupon not found" });
-  }
-
-  const user = await userModel.findOne({ _id });
-  let { cartTotal } = await cartModel
-    .findOne({ orderBy: user._id })
-    .populate("products.product");
-  let totalAfterDiscount = (
-    cartTotal -
-    (cartTotal * validCoupon.discount) / 100
-  ).toFixed(2);
-  await cartModel.findOneAndUpdate(
-    { orderBy: user._id },
-    { totalAfterDiscount },
-    { new: true }
+// delete wishlist
+module.exports.deleteWishlist = async (req, res) => {
+  const deleteItem = await userModel.updateOne(
+    { _id: req.body.userId },
+    { $pull: { wishlist: req.body.productId } }
   );
-
-  return res.send({
-    code: 200,
-    message: "coupon applied",
-    data: totalAfterDiscount,
-  });
-};
-
-// create order (cash on delivery)
-
-module.exports.createOrder = async (req, res) => {
-  const { CashOnDelivery, couponApplied } = req.body;
-  const { _id } = req.user;
-  validateMongoDBId(_id);
-  try {
-    if (!CashOnDelivery) {
-      return res.send({ code: 400, message: "cash on delivery is required" });
-    }
-    const user = await userModel.findById(_id);
-    const userCart = await cartModel.findOne({ orderBy: user._id });
-    let finalAmount = 0;
-
-    if (couponApplied && userCart.totalAfterDiscount) {
-      finalAmount = userCart.totalAfterDiscount;
-    } else {
-      finalAmount = userCart.cartTotal;
-    }
-
-    let newOrder = await new orderModel({
-      products: userCart.products,
-      paymentIntent: {
-        id: uniqid(),
-        method: "Cash On Delivery",
-        amount: finalAmount,
-        status: "Cash On Delivery",
-        created: Date.now(),
-        currency: "USD",
-      },
-      orderBy: user._id,
-      orderStatus: "Cash On Delivery",
-    }).save();
-
-    let update = userCart.products.map((item) => {
-      return {
-        updateOne: {
-          filter: { _id: item.product._id },
-          update: { $inc: { quantity: -item.count, sold: +item.count } },
-        },
-      };
-    });
-    const updated = await productModel.bulkWrite(update, {});
-    return res.send({ code: 200, message: "order created", data: newOrder });
-  } catch {
-    return res.send({ code: 500, message: "order not created" });
-  }
-};
-
-// get orders
-
-module.exports.getOrders = async (req, res) => {
-  const { _id } = req.user;
-  validateMongoDBId(_id);
-  try {
-    const user = await userModel.findById(_id).populate("orders");
-    if (user) {
-      return res.send({
-        code: 200,
-        message: "orders found",
-        data: user.orders,
-      });
-    }
-  } catch {
-    return res.send({ code: 500, message: "orders not found" });
-  }
-};
-
-// update order status
-module.exports.updateOrderStatus = async (req, res) => {
-  const { status } = req.body;
-  const { id } = req.params;
-  validateMongoDBId(id);
-  try{
-    const updateOrderStatus = await orderModel.findByIdAndUpdate(
-        id,
-        {
-          orderStatus: status,
-          paymentIntent: {
-            status: status,
-          },
-        },
-        { new: true }
-      );
-      return res.send({code : 200 , message : "order status updated" , data : updateOrderStatus});
-  }
-  catch{
-    return res.send({code : 500, message : "order status not updated"});
+  if (deleteItem) {
+    res.send({ code: 200, message: "item deleted" });
+  } else {
+    res.send({ code: 400, message: "item not deleted" });
   }
 };

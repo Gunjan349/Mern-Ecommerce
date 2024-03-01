@@ -1,11 +1,11 @@
-const rolesModels  = require('../Models/RolesModel')
+const rolesModel  = require('../Models/RolesModel')
 
 module.exports.addRole = async (req,res)=>{
 
     const role = req.body.role;
     const permissions = req.body.permissions;
 
-    const newrole = new rolesModels({role , permissions})
+    const newrole = new rolesModel({role , permissions})
     const isSaved = await newrole.save()
 
     if(isSaved){
