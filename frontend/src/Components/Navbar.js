@@ -4,7 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import categories from "./Categories";
 
 const Navbar = () => {
-  const rights = JSON.parse(localStorage.getItem("rights"))[0].permissions;
+  const type = localStorage.getItem("userType")
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -14,7 +14,7 @@ const Navbar = () => {
         <div className="navbar flex z-10 w-screen text-white bg-brown text-lg cursor-pointer leading-10">
           <div className=" hover:bg-white hover:text-brown">
             <NavLink to="/">
-              <h3 className="px-3">Home</h3>
+              <h3 className="px-4">Home</h3>
             </NavLink>
           </div>
 
@@ -39,7 +39,7 @@ const Navbar = () => {
               })}
           </div>
 
-          {rights.indexOf("Update price") !== -1 && token && (
+          {type === "seller" && token && (
             <div className="hover:bg-white hover:text-brown">
               <NavLink to="/add/products">
                 <h3>Add Products</h3>

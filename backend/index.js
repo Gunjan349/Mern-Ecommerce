@@ -59,7 +59,7 @@ app.post('/get-cart' , user.getcart);
 app.post('/wishlist' , user.addToWishlist);
 app.post('/get-wishlist' , user.getWishlist);
 app.post('/delete-wishlist' , user.deleteWishlist);
-app.put('/password' ,middleware.authorization , user.updatePassword)
+app.put('/password' , user.updatePassword);
 app.post('/forgot-password' , user.forgotPassword);
 app.post('/reset-password' , user.resetPassword)
 app.post('/delete-cart' , user.deleteCart);

@@ -19,9 +19,9 @@ const AddProduct = () => {
 
   useEffect(() => {
      const token  = localStorage.getItem("token");
-     const rights = JSON.parse(localStorage.getItem("rights"));
+     const type = localStorage.getItem("userType");
      
-     if((rights)[0].role === "user") {
+     if(type === "user") {
       toast.error("You are not authorized to perform this action.")
       navigate("/")
      }

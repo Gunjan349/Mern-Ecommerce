@@ -1,11 +1,9 @@
 const userModel = require("../Models/userModel");
-const productModel = require("../Models/productModel");
-const cartModel = require("../Models/cartModel");
 const jwt = require("jsonwebtoken");
 const rolesModel = require("../Models/RolesModel");
 const validateMongoDBId = require("./utils/validateMongoDBid");
 const nodemailer = require("nodemailer");
-const uniqid = require("uniqid");
+
 
 // Create user (signup)
 
@@ -15,9 +13,6 @@ module.exports.signUp = async (req, res) => {
   const email = req.body.email;
   const phone = req.body.phone;
   const type = req.body.type || "user";
-  const url =
-    req.body.url ||
-    "https://pixabay.com/vectors/blank-profile-picture-mystery-man-973460/";
   const findUser = await userModel.findOne({ email: email });
 
   const roleData = await rolesModel.findOne({ role : type });
@@ -38,7 +33,7 @@ module.exports.signUp = async (req, res) => {
     const newUser = new userModel({
       Name,
       password,
-      url,
+      
       type,
       email,
       phone,
@@ -56,7 +51,7 @@ module.exports.signUp = async (req, res) => {
 // login user
 
 module.exports.login = async (req, res) => {
-  console.log(req.body)
+  
   const password = req.body.password;
   const email = req.body.email;
 

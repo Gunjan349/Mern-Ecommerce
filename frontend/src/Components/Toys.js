@@ -9,7 +9,7 @@ const Toys = () => {
   const navigate = useNavigate();
   const [data, setdata] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
-  console.log(likedProducts);
+  
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
