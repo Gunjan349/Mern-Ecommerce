@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
 import API_URL from '../url'
+import {toast} from "react-toastify";
 
 const ProductPage = () => {
   const [data, setdata] = useState([]);
@@ -62,6 +63,7 @@ const ProductPage = () => {
       .then((res) => {
        
         if (res.data.code === 200) {
+          toast.success("Product added to cart")
           setRefresh(!refresh);
         }
       })
@@ -190,7 +192,7 @@ const ProductPage = () => {
                 Add To Cart
               </button>
               <Link
-                to="/"
+                to="/cart"
                 className="text-white bg-lightpurple rounded-full hover:bg-brown py-2 px-5"
               >
                 Buy Now
