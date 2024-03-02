@@ -22,13 +22,13 @@ module.exports.signUp = async (req, res) => {
   if (!Name) {
     return res.send({ code: 400, message: "Name required" });
   } else if (!password) {
-    return res.send({ code: 400, message: "password required" });
+    return res.send({ code: 400, message: "Password required" });
   } else if (!email) {
-    return res.send({ code: 400, message: "email required" });
+    return res.send({ code: 400, message: "Email required" });
   } else if (!phone) {
-    return res.send({ code: 400, message: "phone required" });
+    return res.send({ code: 400, message: "Phone number required" });
   } else if (findUser) {
-    return res.send("user already exists");
+    return res.send({code:400 , message: "User already exists"});
   } else {
     const newUser = new userModel({
       Name,
