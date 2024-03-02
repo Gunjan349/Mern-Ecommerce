@@ -22,7 +22,7 @@ const ProductSidebar = () => {
     <>
       <div className="flex">
         <buton
-          className=" fixed bottom-10 bg-brown w-10 h-10 rounded-full flex justify-center items-center duration-300 right-16  text-white z-10"
+          className="fixed bottom-10 bg-brown w-10 h-10 rounded-full flex justify-center items-center duration-300   text-white z-10 right-16"
           onClick={toggle}
         >
           <IoIosArrowBack />
@@ -86,7 +86,7 @@ const ProductSidebar = () => {
           </div>
         </div>
         <div
-          className={`sm:${open ? "hidden" : "visible"} duration-300 `}
+          className={`sm:${open ? "hidden" : "visible"} duration-300 relative`}
         >
           <div>
             <Products color={changeColor} size={changeSize} ref={productRef} />
