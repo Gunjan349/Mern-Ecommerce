@@ -20,7 +20,7 @@ const ProductSidebar = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="flex sm:mx-0">
         <buton
           className="fixed bottom-10 bg-brown w-10 h-10 rounded-full flex justify-center items-center duration-300   text-white z-10 right-16"
           onClick={toggle}
@@ -31,7 +31,7 @@ const ProductSidebar = () => {
         <div
           className={`sidebar ${
             open ? "w-72" : "w-0"
-          } relative duration-700 ease-in-out sm:mr-10 z-90 sm:${
+          } relative duration-700 ease-in-out z-90 sm:${
             open ? "w-screen" : "w-0"
           }`}
         >
@@ -86,7 +86,7 @@ const ProductSidebar = () => {
           </div>
         </div>
         <div
-          className={`sm:${open ? "hidden" : "visible"} duration-300 relative`}
+          className={` sm:${open ? "hidden" : "visible"} duration-300 relative`}
         >
           <div>
             <Products color={changeColor} size={changeSize} ref={productRef} />

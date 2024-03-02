@@ -81,11 +81,11 @@ const HomeAppliances = () => {
 
   return (
     <>
-      <div className="wrapper bg-lightgrey mx-16 lg:mx-8 mt-20">
-        <div className="heading font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
+      <div className="wrapper bg-lightgrey mt-20">
+        <div className="heading  mx-16 lg:mx-8 font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
           <h4>Home Appliances</h4>
         </div>
-        <div className="image-wrapper">
+        <div className="image-wrapper  mx-16 sm:mx-0">
           <div className="fashion-boxes grid grid-cols-4 gap-5 ">
             {data &&
               data.length > 0 &&
@@ -99,13 +99,13 @@ const HomeAppliances = () => {
                         className="rounded-md"
                       />
                       <div
-                        className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white"
+                        className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white xs:p-1"
                         onClick={() => handleProduct(item._id)}
                       >
-                        <div className="content-title text-xl font-bold mb-1">
+                        <div className="content-title text-xl font-bold mb-1 xs:hidden">
                           {item.Name}
                         </div>
-                        <div className="content-desc">{item.description}</div>
+                        <div className="content-desc xs:leading-6">{item.description}</div>
                         <ReactStars
                           count={5}
                           size={24}
@@ -113,7 +113,7 @@ const HomeAppliances = () => {
                           edit={false}
                           activeColor="#ffd700"
                         />
-                        <div className="price text-red-600 font-bold tracking-wide text-lg">
+                        <div className="price text-red-600 font-bold tracking-wide text-lg xs:font-normal">
                           Rs.{item.price}/-
                         </div>
                       </div>
@@ -122,7 +122,7 @@ const HomeAppliances = () => {
                           (likedItems) => likedItems._id === item._id
                         ) ? (
                           <FaHeart
-                            size={30}
+                            size={25}
                             className={`absolute right-5 bottom-5 text-red-600`}
                             onClick={(e) => {
                               deleteWishlist(item._id);
@@ -130,7 +130,7 @@ const HomeAppliances = () => {
                           />
                         ) : (
                           <FaHeart
-                            size={30}
+                            size={25}
                             className={`absolute right-5 bottom-5`}
                             onClick={(e) => {
                               handleWishlist(item._id);

@@ -32,12 +32,12 @@ const SpecialProduct = () => {
 
   return (
     <>
-      <div className="wrapper mx-16 lg:mx-8 mt-20 sm:mx-3">
-      <div className="heading font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
+      <div className="wrapper  mt-20 sm:mx-3">
+      <div className="heading mx-16 lg:mx-8 font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
         Best Products
       </div>
       <div className="marquee-wrapper shadow-inner shadow-[#0000001a] rounded-md ">
-        <div className="container rounded-md">
+        <div className="container mx-0">
           <Marquee className="flex gap-x-5">
             {data &&
               data.length > 0 &&

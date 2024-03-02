@@ -28,7 +28,7 @@ const LandingPage = () => {
          
         </div>
       </div>
-      <div className="relative float-right mt-6 text-brown flex items-center gap-x-10 mr-5">
+      <div className="relative float-right mt-6 text-brown flex items-center gap-x-10 mr-3">
         <Link className="wishlist" to="/wishist">
           <FaRegHeart size={25} className="hover:scale-75 duration-500" />
         </Link>
@@ -37,8 +37,8 @@ const LandingPage = () => {
         </Link>
       </div>
 
-      <div className="home-heading relative  font-serif float-right my-48">
-        <p className="font-bold tracking-wide text-4xl">
+      <div className="home-heading relative  font-serif float-right mt-48 sm:mt-28 mb-28 xs:mb-16">
+        <p className="font-bold tracking-wide text-4xl sm:text-center">
           Wear Confidence With Style
         </p>
         <p className="text-lg tracking-wide text-center mt-3">

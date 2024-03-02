@@ -147,8 +147,8 @@ const Products = forwardRef(({ color, size }, ref) => {
   }));
 
   return (
-    <div className="mx-16 lg:mx-8">
-      <div className="flex items center gap-x-10">
+    <div className="products mx-16 lg:mx-8">
+      <div className="flex items center gap-x-10 sm:gap-x-6">
         <Link to="/" className="p-3 bg-brown rounded-full w-fit text-white ">
           <MdKeyboardDoubleArrowLeft size={25} />
         </Link>
@@ -156,7 +156,7 @@ const Products = forwardRef(({ color, size }, ref) => {
       </div>
       <div className="wrapper bg-lightgrey mt-10 ">
         <div className="image-wrapper">
-          <div className="product-boxes grid grid-cols-4 gap-5 gap-y-16 ">
+          <div className="product-boxes grid grid-cols-4 gap-x-5 gap-y-16 ">
             
             {data &&
               data.length > 0 &&
@@ -177,12 +177,12 @@ const Products = forwardRef(({ color, size }, ref) => {
                         className="rounded-md h-80"
                       
                       />
-                      <div className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%] bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white"
+                      <div className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%] bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white xs:p-1"
                         onClick={() => handleProduct(item._id)}>
-                        <div className="content-title text-xl font-bold mb-2">
+                        <div className="content-title text-xl font-bold mb-1 xs:hidden">
                           {item.Name}
                         </div>
-                        <div className="content-desc">{item.description}</div>
+                        <div className="content-desc xs:leading-6">{item.description}</div>
                         <ReactStars
                           count={5}
                           size={24}
@@ -190,7 +190,7 @@ const Products = forwardRef(({ color, size }, ref) => {
                           edit={false}
                           activeColor="#ffd700"
                         />
-                        <div className="price text-red-600 font-bold tracking-wide text-lg">
+                        <div className="price text-red-600 font-bold tracking-wide text-lg xs:font-normal">
                           Rs.{item.price}/-
                         </div>
                         <div>
@@ -198,7 +198,7 @@ const Products = forwardRef(({ color, size }, ref) => {
                             (likedItems) => likedItems._id === item._id
                           ) ? (
                             <FaHeart
-                              size={30}
+                              size={25}
                               className={`absolute right-5 bottom-5 text-red-600`}
                               onClick={(e) => {
                                 deleteWishlist(item._id);
@@ -206,7 +206,7 @@ const Products = forwardRef(({ color, size }, ref) => {
                             />
                           ) : (
                             <FaHeart
-                              size={30}
+                              size={25}
                               className={`absolute right-5 bottom-5 text-black`}
                               onClick={(e) => {
                                 handleWishlist(item._id);

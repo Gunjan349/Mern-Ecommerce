@@ -98,12 +98,12 @@ const FeaturedCollection = () => {
 
   return (
     <>
-      <div className="wrapper mx-16 lg:mx-8 mt-20 sm:mx-3">
-        <div className="heading font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
+      <div className="wrapper  mt-20 ">
+        <div className="heading mx-16 lg:mx-8 font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
           <h4>Featured Collection</h4>
         </div>
 
-        <div className="image-wrapper">
+        <div className="image-wrapper mx-16 sm:mx-0">
           <div className="featured-collection grid grid-cols-2 gap-12 lg:gap-6">
             {data &&
               data.length > 0 &&

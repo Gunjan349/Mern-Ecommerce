@@ -52,7 +52,7 @@ const ProductPage = () => {
       });
   }, [refresh]);
 
-  console.log(process.env)
+  
 
   const handleAddToCart = (productId) => {
     const ProductId = productId;
@@ -115,17 +115,17 @@ const ProductPage = () => {
   return (
     <>
       <div className="main-product mx-44 mt-10">
-        <div className="mb-24  bg-white p-6 rounded-md grid grid-cols-2 md:grid-cols-1">
+        <div className="mb-24  bg-white p-6 rounded-md grid grid-cols-2 md:grid-cols-1 sm:p-0">
           <div className="product-left border-r-2 border-gray-200 md:border-none ">
-            <div className="main-image h-full">
+            <div className="main-image h-full w-full">
               <img
                 src={API_URL + `/${data.image}`}
                 alt="image"
-                className="rounded-md h-full"
+                className="rounded-md h-full sm:rounded-none w-full"
               ></img>
             </div>
           </div>
-          <div className=" ml-12 flex flex-col gap-y-3 lg:ml-4">
+          <div className=" ml-12 flex flex-col gap-y-3 sm:mt-4 lg:ml-4">
             <div className="heading font-bold text-3xl tracking-wide">
               {data.Name}
             </div>
@@ -234,10 +234,7 @@ const ProductPage = () => {
             </div>
           </div>
         </div>
-        <div className="description bg-white shadow-lg p-7 gap-y-3 rounded-md mb-16">
-          <h1 className="font-bold text-xl tracking-wide mb-3">Description</h1>
-          <p>{data.description}</p>
-        </div>   
+        
       </div>
     </>
   );

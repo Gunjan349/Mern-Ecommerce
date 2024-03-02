@@ -101,23 +101,23 @@ const BestSellers = () => {
 
   return (
     <>
-      <div className="wrapper mx-16 lg:mx-8 mt-20 sm:mx-3">
-        <div className="heading z-10 relative font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
+      <div className="wrapper  mt-20">
+        <div className="heading mx-16 lg:mx-8 z-10 relative font-bold text-2xl xs:text-xl mb-6 underline underline-offset-4">
           <h4>Best Deals Today</h4>
         </div>
 
-        <div className="image-wrapper">
+        <div className="image-wrapper mx-16 sm:mx-0">
           <div className="bestsellers grid grid-cols-2 gap-12 lg:gap-6">
             {data &&
               data.length > 0 &&
               data.map((item, index) => {
                 if (item.price < 100 && item.rating === 5) {
                   return (
-                    <div className="relative flex bg-white h-96 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
+                    <div className="relative flex bg-white rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
-                        className="rounded-md  lg:w-52"
+                        className="rounded-md  lg:w-52 h-80"
                         onClick={() => handleProduct(item._id)}
                       />
 

@@ -9,44 +9,44 @@ import { TbTruckDelivery } from "react-icons/tb";
 const HomeMarquee = () =>{
     return(
         <>
-            <Marquee>
-                <div className='home-marquee bg-white mt-14 flex justify-between py-6 w-screen items-center xs:gap-x-6'>
-                    <div className="delivery flex gap-4 items-center pl-10 xl:pl-20">
+            <Marquee className="py-5 fixed bg-white">
+                
+                    <div className="delivery flex gap-4 items-center px-20">
                         <TbTruckDelivery size={30}/>
                         <div>
                         <p className='font-bold'>Free Delivery</p>
                         
                         </div>
                     </div>
-                    <div className="gift flex gap-4 items-center">
+                    <div className="gift flex gap-4 items-center px-20">
                         <IoGiftOutline size={30}/>
                        <div>
                        <p className='font-bold'>Daily Surprises</p>
                         
                        </div>
                     </div>
-                    <div className="support flex gap-4 items-center md:hidden">
+                    <div className="support flex gap-4 items-center px-20">
                         <TfiHeadphoneAlt size={30}/>
                         <div>
-                        <p className='font-bold'>24/7 Support</p>
+                        <p className='font-bold'>20/7 Support</p>
                        
                         </div>
                     </div>
-                    <div className="prices flex gap-4 items-center">
+                    <div className="prices flex gap-4 items-center px-20">
                         <PiSealCheck size={30}/>
                        <div>
                        <p className='font-bold'>Affordable Prices</p>
                        
                        </div>
                     </div>
-                    <div className="payment flex gap-4 items-center">
+                    <div className="payment flex gap-4 items-center px-20">
                         <FaRegCreditCard size={30}/>
                        <div>
                        <p className='font-bold'>Secure Payment</p>
                        
                        </div>
                     </div>
-                </div>
+                
             </Marquee>
         </>
     )
