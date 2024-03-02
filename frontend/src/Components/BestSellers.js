@@ -113,7 +113,7 @@ const BestSellers = () => {
               data.map((item, index) => {
                 if (item.price < 100 && item.rating === 5) {
                   return (
-                    <div className="relative flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
+                    <div className="relative flex bg-white h-96 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"

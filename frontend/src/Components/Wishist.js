@@ -4,7 +4,8 @@ import { CiHeart } from "react-icons/ci";
 import { GoArrowLeft } from "react-icons/go";
 import axios from "axios";
 import ReactStars from "react-rating-stars-component";
-import API_URL from '../url'
+import {toast} from "react-toastify";
+import API_URL from '../url';
 
 const Wishlist = () => {
   const navigate = useNavigate();
@@ -30,7 +31,8 @@ const Wishlist = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate("/login");
+      toast.info("Please login first to see wishlisted products.")
+      navigate("/")
     }
   }, []);
 

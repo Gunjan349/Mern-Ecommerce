@@ -10,6 +10,7 @@ import { FaHeart } from "react-icons/fa";
 import Search from "./Search";
 import axios from "axios";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
+import SyncLoader from "react-spinners/SyncLoader";
 import { Link } from "react-router-dom";
 import API_URL from '../url'
 
@@ -21,11 +22,12 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
   const [refresh, setRefresh] = useState(false);
   const [search, setSearch] = useState("");
   const [isSearch, setIsSearch] = useState(false);
+  const [spinner, setSpinner] = useState(false);
 
   const param = useParams();
   useEffect(() => {
     const headers = { authorization: localStorage.getItem("token") };
-
+    setSpinner(true)
     axios
       .get(API_URL + "/category?catName=" + param.catName, {
         headers,
@@ -34,6 +36,7 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
       .then((res) => {
         
         setdata(res.data.data);
+        setSpinner(false);
       })
       .catch((err) => {
         console.log(err);
@@ -178,7 +181,7 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
                     <img
                       src={API_URL + `/${item.image}`}
                       alt="img"
-                      className="rounded-md"
+                      className="rounded-md h-80"
                      
                     />
                     <div className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%] bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white"  onClick={() => handleProduct(item._id)}>
@@ -222,6 +225,9 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
               })}
           </div>
         </div>
+      </div>
+      <div className="spinner fixed top-[50%] left-[50%] -translate-y-[50%] -translate-x-[50%]">
+        {spinner && <SyncLoader color={"#e36422"} loading={spinner} />}
       </div>
     </div>
   );

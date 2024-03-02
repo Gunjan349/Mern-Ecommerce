@@ -92,11 +92,11 @@ const Toys = () => {
               data.map((item, index) => {
                 if (item.category === "Toys" && item.rating === 5) {
                   return (
-                    <div className="relative overflow-hidden group">
+                    <div className="relative overflow-hidden group ">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
-                        className="rounded-md"
+                        className="rounded-md h-80"
                       />
                       <div
                         className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white"

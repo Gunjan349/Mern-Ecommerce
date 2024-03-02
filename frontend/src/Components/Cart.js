@@ -32,7 +32,7 @@ const Cart = () => {
 
     if (!token) {
       toast.info("Please login first , to see cart products");
-      navigate("/login");
+      navigate("/")
     }
   }, []);
 
@@ -66,7 +66,7 @@ const Cart = () => {
         handleOpenrazorpay(res.data.data);
       })
       .catch((err) => {
-        console.log(err, "32");
+        console.log(err);
       });
   };
 

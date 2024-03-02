@@ -20,7 +20,7 @@ const Navbar = () => {
 
           <div className=" hover:bg-white hover:text-brown">
             <NavLink to="/store">
-              <h3 className="px-3">Our Store</h3>
+              <h3 className="px-4">Our Store</h3>
             </NavLink>
           </div>
 
@@ -30,7 +30,7 @@ const Navbar = () => {
               categories.map((item, index) => {
                 return (
                   <h3
-                    className="px-3 hover:bg-white hover:text-brown"
+                    className="px-4 hover:bg-white hover:text-brown"
                     onClick={() => navigate("/category/" + item)}
                   >
                     {item}
@@ -42,7 +42,7 @@ const Navbar = () => {
           {type === "seller" && token && (
             <div className="hover:bg-white hover:text-brown">
               <NavLink to="/add/products">
-                <h3>Add Products</h3>
+                <h3 className="px-4">Add Products</h3>
               </NavLink>
             </div>
           )}
