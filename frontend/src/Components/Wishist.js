@@ -4,6 +4,7 @@ import { CiHeart } from "react-icons/ci";
 import { GoArrowLeft } from "react-icons/go";
 import axios from "axios";
 import ReactStars from "react-rating-stars-component";
+import API_URL from '../url'
 
 const Wishlist = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Wishlist = () => {
     const data = { userId: localStorage.getItem("userId") };
 
     axios
-      .post("http://localhost:3002/get-wishlist", data)
+      .post(API_URL + "/get-wishlist", data)
 
       .then((res) => {
        
@@ -39,7 +40,7 @@ const Wishlist = () => {
     const userId = localStorage.getItem("userId");
     const _data = { productId: ProductId, userId: userId };
     axios
-      .post("http://localhost:3002/delete-wishlist", _data)
+      .post(API_URL + "/delete-wishlist", _data)
       .then((res) => {
         
         if (res.data.code == 200) {
@@ -57,7 +58,7 @@ const Wishlist = () => {
  
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/user-cart", _data)
+      .post(API_URL + "/user-cart", _data)
 
       .then((res) => {
         console.log(res.data);
@@ -99,7 +100,7 @@ const Wishlist = () => {
                 return (
                   <div className="box1 flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
                     <img
-                      src={`http://localhost:3002/${item.image}`}
+                      src={API_URL + `/${item.image}`}
                       alt="img"
                       className="rounded-md  lg:w-52 sm:w-44"
                     />

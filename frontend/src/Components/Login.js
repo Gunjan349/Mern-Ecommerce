@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import API_URL from '../url'
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const Login = () => {
   const handleSubmit = (e) =>{
     e.preventDefault();
     const data = {email : userEmail , password : userPassword}
-    axios.post("http://localhost:3002/login" , data)
+    axios.post(API_URL + "/login" , data)
     .then((res) =>{
       toast.success(res.data.message)
       if(res.data.token){

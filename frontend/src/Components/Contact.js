@@ -5,6 +5,7 @@ import { IoMdMail } from "react-icons/io";
 import { FaInfoCircle } from "react-icons/fa";
 import axios from 'axios';
 import {toast } from "react-toastify";
+import API_URL from '../url'
 
 const Contact = () => {
 
@@ -15,7 +16,7 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = {userName : userName, email : email, message : message}
-    axios.post("http://localhost:3002/contact", data)
+    axios.post(API_URL + "/contact", data)
     .then(res => {
       if(res.data.code === 200){
          toast.success("Message sent successfully.")

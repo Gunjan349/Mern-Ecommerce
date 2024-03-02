@@ -1,7 +1,8 @@
 import React , {useState} from "react";
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import {toast} from "react-toastify"
+import {toast} from "react-toastify";
+import API_URL from '../url'
 
 const ResetPassword = () => {
 
@@ -13,7 +14,7 @@ const ResetPassword = () => {
   const handleSubmit = (e) =>{
     e.preventDefault();
     const data = {otp : userOtp , password : password}
-    axios.post("http://localhost:3002/reset-password" , data)
+    axios.post(API_URL + "/reset-password" , data)
     .then((res) =>{
       console.log(res.data)
       if (res.data.code === 200) {

@@ -12,6 +12,7 @@ import axios from "axios";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
 import SyncLoader from "react-spinners/SyncLoader";
+import API_URL from '../url'
 
 const Products = forwardRef(({ color, size }, ref) => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const Products = forwardRef(({ color, size }, ref) => {
     const headers = { authorization: localStorage.getItem("token") };
     setSpinner(true);
     axios
-      .get("http://localhost:3002/get-products", { headers })
+      .get(API_URL + "/get-products", { headers })
 
       .then((res) => {
         setdata(res.data.data);
@@ -41,7 +42,7 @@ const Products = forwardRef(({ color, size }, ref) => {
   useEffect(() => {
     const _data = { userId: localStorage.getItem("userId") };
     axios
-      .post("http://localhost:3002/get-wishlist", _data)
+      .post(API_URL + "/get-wishlist", _data)
       .then((res) => {
         setLikedProducts(res.data.data.wishlist);
       })
@@ -60,7 +61,7 @@ const Products = forwardRef(({ color, size }, ref) => {
     
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/wishlist", _data)
+      .post(API_URL + "/wishlist", _data)
 
       .then((res) => {
         
@@ -79,7 +80,7 @@ const Products = forwardRef(({ color, size }, ref) => {
 
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/delete-wishlist", _data)
+      .post(API_URL + "/delete-wishlist", _data)
 
       .then((res) => {
         if (res.data.code === 200) {
@@ -99,7 +100,7 @@ const Products = forwardRef(({ color, size }, ref) => {
       setRefresh(!refresh);
     } else {
       axios
-        .get("http://localhost:3002/search?search=" + search)
+        .get(API_URL + "/search?search=" + search)
         .then((res) => {
           setdata(res.data.data);
           setIsSearch(true);
@@ -115,7 +116,7 @@ const Products = forwardRef(({ color, size }, ref) => {
       const colourData = { color: color };
 
       axios
-        .post("http://localhost:3002/color", colourData)
+        .post(API_URL + "/color", colourData)
         .then((res) => {
           if (res.data.data.length > 0) {
             setdata(res.data.data);
@@ -131,7 +132,7 @@ const Products = forwardRef(({ color, size }, ref) => {
       const sizeData = { size: size };
 
       axios
-        .post("http://localhost:3002/size", sizeData)
+        .post(API_URL + "/size", sizeData)
         .then((res) => {
           console.log(res.data);
           if (res.data.data.length > 0) {
@@ -171,7 +172,7 @@ const Products = forwardRef(({ color, size }, ref) => {
                   return (
                     <div className="relative overflow-hidden group">
                       <img
-                        src={`http://localhost:3002/${item.image}`}
+                        src={API_URL + `/${item.image}`}
                         alt="img"
                         className="rounded-md"
                       

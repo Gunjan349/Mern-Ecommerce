@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Marquee from "react-fast-marquee";
-import { Link , useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_URL from '../url'
 
 const SpecialProduct = () => {
 
@@ -14,7 +15,7 @@ const SpecialProduct = () => {
     const headers = { authorization: localStorage.getItem("token") };
 
     axios
-      .get("http://localhost:3002/get-products", { headers })
+      .get(API_URL + "/get-products", { headers })
 
       .then((res) => {
         console.log(res, "19");
@@ -44,7 +45,7 @@ const SpecialProduct = () => {
                 if (item.rating === 5 && item.category !== "Books" && item.price > 3000)
                { return (
                   <div className="max-w-xs" onClick={() => handleProduct(item._id)}>
-                    <img src={`http://localhost:3002/${item.image}`} className="px-7 md:w-48"/>
+                    <img src={API_URL + `/${item.image}`} className="px-7 md:w-48"/>
                   </div>
                 );}
               })}

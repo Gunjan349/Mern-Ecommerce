@@ -1,7 +1,8 @@
 import React ,{ useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import {toast} from "react-toastify"
+import {toast} from "react-toastify";
+import API_URL from '../url'
 
 const ForgotPassword = () => {
 
@@ -13,7 +14,7 @@ const ForgotPassword = () => {
   const handleSubmit = (e) =>{
     e.preventDefault();
     const data = {email : userEmail}
-    axios.post("http://localhost:3002/forgot-password" , data)
+    axios.post(API_URL + "/forgot-password" , data)
     .then((res) =>{
       if (res.data.code === 200) {
         toast.success("OTP has been sent to Email")

@@ -3,6 +3,7 @@ import ReactStars from "react-rating-stars-component";
 import { Link, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
+import API_URL from '../url'
 
 const ProductPage = () => {
   const [data, setdata] = useState([]);
@@ -27,7 +28,7 @@ const ProductPage = () => {
     const headers = { authorization: localStorage.getItem("token") };
 
     axios
-      .get("http://localhost:3002/get-product/" + param.id, { headers })
+      .get(API_URL + "/get-product/" + param.id, { headers })
 
       .then((res) => {
        
@@ -41,7 +42,7 @@ const ProductPage = () => {
   useEffect(() => {
     const _data = { userId: localStorage.getItem("userId") };
     axios
-      .post("http://localhost:3002/get-wishlist", _data)
+      .post(API_URL + "/get-wishlist", _data)
       .then((res) => {
         setLikedProducts(res.data.data.wishlist);
       })
@@ -56,7 +57,7 @@ const ProductPage = () => {
    
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/user-cart", _data)
+      .post(API_URL + "/user-cart", _data)
 
       .then((res) => {
        
@@ -75,7 +76,7 @@ const ProductPage = () => {
     
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/wishlist", _data)
+      .post(API_URL + "/wishlist", _data)
 
       .then((res) => {
        
@@ -94,7 +95,7 @@ const ProductPage = () => {
 
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/delete-wishlist", _data)
+      .post(API_URL + "/delete-wishlist", _data)
 
       .then((res) => {
         if (res.data.code === 200) {
@@ -114,7 +115,7 @@ const ProductPage = () => {
           <div className="product-left border-r-2 border-gray-200 md:border-none ">
             <div className="main-image h-full">
               <img
-                src={`http://localhost:3002/${data.image}`}
+                src={API_URL + `/${data.image}`}
                 alt="image"
                 className="rounded-md h-full"
               ></img>

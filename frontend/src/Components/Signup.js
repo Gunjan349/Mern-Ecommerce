@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {  useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import API_URL from '../url'
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Signup = () => {
       type: userType,
     };
     axios
-      .post('http://localhost:3002/signup', data)
+      .post(API_URL + '/signup', data)
       .then((res) => {
        
         if (res.data.code===200) {

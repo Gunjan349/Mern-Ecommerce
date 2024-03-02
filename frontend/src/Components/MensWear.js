@@ -4,6 +4,7 @@ import ReactStars from "react-rating-stars-component";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import API_URL from '../url'
 
 const MenWear = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const MenWear = () => {
     const headers = { authorization: localStorage.getItem("token") };
 
     axios
-      .get("http://localhost:3002/get-products", { headers })
+      .get(API_URL + "/get-products", { headers })
 
       .then((res) => {
         setdata(res.data.data);
@@ -29,7 +30,7 @@ const MenWear = () => {
   useEffect(() => {
     const _data = { userId: localStorage.getItem("userId") };
     axios
-      .post("http://localhost:3002/get-wishlist", _data)
+      .post(API_URL + "/get-wishlist", _data)
       .then((res) => {
         setLikedProducts(res.data.data.wishlist);
       })
@@ -48,7 +49,7 @@ const MenWear = () => {
 
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/wishlist", _data)
+      .post(API_URL + "/wishlist", _data)
 
       .then((res) => {
         if (res.data.code == 200) {
@@ -66,7 +67,7 @@ const MenWear = () => {
 
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/delete-wishlist", _data)
+      .post(API_URL + "/delete-wishlist", _data)
 
       .then((res) => {
         if (res.data.code == 200) {
@@ -93,7 +94,7 @@ const MenWear = () => {
                   return (
                     <div className=" relative overflow-hidden group">
                       <img
-                        src={`http://localhost:3002/${item.image}`}
+                        src={API_URL + `/${item.image}`}
                         alt="img"
                         className="rounded-md"
                       />

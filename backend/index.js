@@ -13,7 +13,7 @@ console.log(process.env.CONNECTION_STRING);
 mongoose.set('strictQuery',false);
 mongoose.connect(process.env.CONNECTION_STRING)
 .then(()=>{console.log('connected to db')})
-.catch((err)=>{console.log(err),"12"})
+.catch((err)=>{console.log(err)})
 
 
 const bodyParser = require('body-parser');

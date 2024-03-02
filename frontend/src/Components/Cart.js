@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactStars from "react-rating-stars-component";
+import API_URL from '../url'
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Cart = () => {
     const data = { userId: localStorage.getItem("userId") };
 
     axios
-      .post("http://localhost:3002/get-cart", data)
+      .post(API_URL + "/get-cart", data)
 
       .then((res) => {
         setData(res.data.data.cart);
@@ -44,7 +45,7 @@ const Cart = () => {
       name: "Shopping website",
       handler: (response) => {
         axios
-          .post("http://localhost:3002/verify", { response: response })
+          .post(API_URL + "/verify", { response: response })
           .then((res) => {})
           .catch((err) => {
             console.log(err);
@@ -59,7 +60,7 @@ const Cart = () => {
     const _data = { amount: amount };
 
     axios
-      .post("http://localhost:3002/orders", _data)
+      .post(API_URL + "/orders", _data)
 
       .then((res) => {
         handleOpenrazorpay(res.data.data);
@@ -75,7 +76,7 @@ const Cart = () => {
     const userId = localStorage.getItem("userId");
     const _data = { productId: ProductId, userId: userId };
     axios
-      .post("http://localhost:3002/delete-cart", _data)
+      .post(API_URL + "/delete-cart", _data)
       .then((res) => {
         if (res.data.code == 200) {
           setRefresh(!refresh);
@@ -109,7 +110,7 @@ const Cart = () => {
               return (
                 <div className="box1 flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
                   <img
-                    src={`http://localhost:3002/${item.image}`}
+                    src={API_URL + `/${item.image}`}
                     alt="img"
                     className="rounded-md  lg:w-52 sm:w-44"
                   />

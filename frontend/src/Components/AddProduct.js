@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
+import API_URL from '../url'
 
 
 const AddProduct = () => {
@@ -60,7 +61,7 @@ const AddProduct = () => {
     const headers = { authorization: localStorage.getItem("token") };
     
     axios
-      .post("http://localhost:3002/add-products", data, { headers })
+      .post(API_URL + "/add-products", data, { headers })
       .then((res) => {
         if (res.data.code === 200) {
           toast.success("Product added successfully.");

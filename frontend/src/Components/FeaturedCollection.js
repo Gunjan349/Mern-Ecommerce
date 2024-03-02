@@ -4,6 +4,7 @@ import ReactStars from "react-rating-stars-component";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
+import API_URL from '../url'
 
 const FeaturedCollection = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const FeaturedCollection = () => {
     const headers = { authorization: localStorage.getItem("token") };
 
     axios
-      .get("http://localhost:3002/get-products", { headers })
+      .get(API_URL + "/get-products", { headers })
 
       .then((res) => {
         setdata(res.data.data);
@@ -28,7 +29,7 @@ const FeaturedCollection = () => {
   useEffect(() => {
     const _data = { userId: localStorage.getItem("userId") };
     axios
-      .post("http://localhost:3002/get-wishlist", _data)
+      .post(API_URL + "/get-wishlist", _data)
       .then((res) => {
         setLikedProducts(res.data.data.wishlist);
       })
@@ -43,7 +44,7 @@ const FeaturedCollection = () => {
 
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/user-cart", _data)
+      .post(API_URL + "/user-cart", _data)
 
       .then((res) => {
         if (res.data.code === 200) {
@@ -62,7 +63,7 @@ const FeaturedCollection = () => {
 
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/wishlist", _data)
+      .post(API_URL + "/wishlist", _data)
 
       .then((res) => {
         if (res.data.code == 200) {
@@ -83,7 +84,7 @@ const FeaturedCollection = () => {
 
     const _data = { productId: ProductId, userId };
     axios
-      .post("http://localhost:3002/delete-wishlist", _data)
+      .post(API_URL + "/delete-wishlist", _data)
 
       .then((res) => {
         if (res.data.code === 200) {
@@ -111,7 +112,7 @@ const FeaturedCollection = () => {
                   return (
                     <div className="relative flex bg-white h-96 rounded-md p-5 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
                       <img
-                        src={`http://localhost:3002/${item.image}`}
+                        src={API_URL + `/${item.image}`}
                         alt="img"
                         className="rounded-md  lg:w-52"
                         onClick={() => handleProduct(item._id)}
