@@ -32,13 +32,15 @@ const Signup = () => {
     axios
       .post(API_URL + '/signup', data)
       .then((res) => {
-console.log(res)
         if (res.data.code===200) {
           toast.success("Signed up successfully")
           navigate("/login");
         }
         else{
           toast.error(res.data.message)
+          if(res.data.message === "User already exists"){
+            navigate("/login")
+          }
         }
       })
       .catch((err) => {
