@@ -52,6 +52,8 @@ const ProductPage = () => {
       });
   }, [refresh]);
 
+  console.log(process.env)
+
   const handleAddToCart = (productId) => {
     const ProductId = productId;
     const userId = localStorage.getItem("userId");
