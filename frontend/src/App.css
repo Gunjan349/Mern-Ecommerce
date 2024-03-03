@@ -27,6 +27,11 @@ a{
         margin-right: 6rem;
     }
 
+    .image-wrapper{
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+
    .fashion-boxes , .product-boxes{
         display: grid;
         grid-template-columns: repeat(3 , minmax(0, 1fr));

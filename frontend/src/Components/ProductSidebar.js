@@ -6,7 +6,6 @@ import Products from "./Products";
 import Color from "./FilterColor";
 import Sizes from "./Sizes";
 
-
 const ProductSidebar = () => {
   const [open, setopen] = useState(false);
   const toggle = () => {
@@ -15,14 +14,14 @@ const ProductSidebar = () => {
 
   const [changeColor, setChangeColor] = useState("");
   const [changeSize, setChangeSize] = useState("");
-  
+
   const productRef = useRef();
 
   return (
     <>
-      <div className="flex sm:mx-0">
+      <div className="flex">
         <buton
-          className="fixed bottom-10 bg-brown w-10 h-10 rounded-full flex justify-center items-center duration-300   text-white z-10 right-16"
+          className="absolute bg-brown w-10 h-10 rounded-full flex justify-center items-center duration-300   text-white z-10 right-4 sm:right-0"
           onClick={toggle}
         >
           <IoIosArrowBack />
@@ -31,13 +30,12 @@ const ProductSidebar = () => {
         <div
           className={`sidebar ${
             open ? "w-72" : "w-0"
-          } relative duration-700 ease-in-out z-90 sm:${
-            open ? "w-screen" : "w-0"
-          }`}
+          }  duration-700 ease-in-out sm:${open && "w-screen"}
+          `}
         >
           <div
             className={`filter rounded-md shadow-lg bg-purple text-white leading-8 p-3 duration-300 ${
-              !open && "invisible"
+              !open && "hidden"
             }`}
           >
             <h3 className="Filterby font-bold text-xl border-b-2 border-lightpurple pb-2">
@@ -85,12 +83,8 @@ const ProductSidebar = () => {
             </div>
           </div>
         </div>
-        <div
-          className={` sm:${open ? "hidden" : "visible"} duration-300 relative`}
-        >
-          <div>
-            <Products color={changeColor} size={changeSize} ref={productRef} />
-          </div>
+        <div className={`sm:${open && 'hidden'}`}>
+          <Products  color={changeColor} size={changeSize} ref={productRef} />
         </div>
       </div>
     </>

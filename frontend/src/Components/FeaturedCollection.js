@@ -114,7 +114,7 @@ const FeaturedCollection = () => {
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
-                        className="rounded-md  lg:w-52"
+                        className="rounded-md  lg:w-56 h-80"
                         onClick={() => handleProduct(item._id)}
                       />
 

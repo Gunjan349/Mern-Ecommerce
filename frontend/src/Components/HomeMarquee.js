@@ -11,35 +11,35 @@ const HomeMarquee = () =>{
         <>
             <Marquee className="py-5 fixed bg-white">
                 
-                    <div className="delivery flex gap-4 items-center px-20">
+                    <div className="delivery flex gap-4 items-center px-16">
                         <TbTruckDelivery size={30}/>
                         <div>
                         <p className='font-bold'>Free Delivery</p>
                         
                         </div>
                     </div>
-                    <div className="gift flex gap-4 items-center px-20">
+                    <div className="gift flex gap-4 items-center px-16">
                         <IoGiftOutline size={30}/>
                        <div>
                        <p className='font-bold'>Daily Surprises</p>
                         
                        </div>
                     </div>
-                    <div className="support flex gap-4 items-center px-20">
+                    <div className="support flex gap-4 items-center px-16">
                         <TfiHeadphoneAlt size={30}/>
                         <div>
-                        <p className='font-bold'>20/7 Support</p>
+                        <p className='font-bold'>16/7 Support</p>
                        
                         </div>
                     </div>
-                    <div className="prices flex gap-4 items-center px-20">
+                    <div className="prices flex gap-4 items-center px-16">
                         <PiSealCheck size={30}/>
                        <div>
                        <p className='font-bold'>Affordable Prices</p>
                        
                        </div>
                     </div>
-                    <div className="payment flex gap-4 items-center px-20">
+                    <div className="payment flex gap-4 items-center px-16">
                         <FaRegCreditCard size={30}/>
                        <div>
                        <p className='font-bold'>Secure Payment</p>

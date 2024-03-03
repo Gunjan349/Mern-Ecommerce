@@ -90,17 +90,17 @@ const Wishlist = () => {
           </div>
         </div>
 
-        <div className=" mt-12 mx-16 xs:mx-6">
+        <div className=" mt-12">
           <div className="image-wrapper ">
             <div className="wishlist-content boxes grid  mt-12 grid-cols-2 gap-12 lg:gap-6 ">
               {data.length === 0 && (
-                <h1 className=" text-2xl font-bold text-purple">
+                <h1 className="mx-16 text-2xl font-bold text-purple sm:mx-6">
                   Hmm, can't find any product
                 </h1>
               )}
               {data.map((item, index) => {
                 return (
-                  <div className="box1 flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
+                  <div className=" mx-16 flex sm:mx-0 bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
                     <img
                       src={API_URL + `/${item.image}`}
                       alt="img"
@@ -111,7 +111,7 @@ const Wishlist = () => {
                       <div className="content-title text-2xl font-bold mb-3 md:mb-0 leading-10 lg:leading-7 lg:text-xl md:text-lg">
                         {item.Name}
                       </div>
-                      <div className="content-desc1 my-3 lg:my-1 xs:hidden">
+                      <div className="content-desc my-3 lg:my-1 xs:hidden">
                         {item.description}
                       </div>
                       <div className="stars">
@@ -153,7 +153,7 @@ const Wishlist = () => {
                 );
               })}
             </div>
-            <Link to="/" className="flex gap-x-3 mt-10 items-center">
+            <Link to="/" className="flex gap-x-1 sm:mx-6 mx-16 mt-10 items-center">
               <GoArrowLeft size={25} className="text-brown"/>
               <h1 className="text-brown text-xl font-bold">Continue Shopping</h1>
             </Link>

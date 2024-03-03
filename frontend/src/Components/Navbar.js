@@ -14,13 +14,13 @@ const Navbar = () => {
         <div className="navbar flex z-10 w-screen text-white bg-brown text-lg cursor-pointer leading-10">
           <div className=" hover:bg-white hover:text-brown">
             <NavLink to="/">
-              <h3 className="px-4">Home</h3>
+              <h3 className="px-4 xs:px-2">Home</h3>
             </NavLink>
           </div>
 
           <div className=" hover:bg-white hover:text-brown">
             <NavLink to="/store">
-              <h3 className="px-4">Our Store</h3>
+              <h3 className="px-4 xs:px-2">Our Store</h3>
             </NavLink>
           </div>
 
@@ -42,14 +42,14 @@ const Navbar = () => {
           {type === "seller" && token && (
             <div className="hover:bg-white hover:text-brown">
               <NavLink to="/add/products">
-                <h3 className="px-4">Add Products</h3>
+                <h3 className="px-4 xs:px-2">Add Products</h3>
               </NavLink>
             </div>
           )}
 
           <div className=" hover:bg-white hover:text-brown">
             <NavLink to="/contact">
-              <h3 className="px-4">Contact</h3>
+              <h3 className="px-4 xs:px-2">Contact</h3>
             </NavLink>
           </div>
         </div>

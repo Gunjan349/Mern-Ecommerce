@@ -92,14 +92,14 @@ const Books = () => {
               data.map((item, index) => {
                 if (item.category === "Books" && item.rating ===5) {
                   return (
-                    <div className="relative overflow-hidden group">
+                    <div className="relative overflow-hidden group h-80">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
-                        className="rounded-md h-80"
+                        className="rounded-md h-full"
                       />
                       <div
-                        className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white xs:p-1"
+                        className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white xs:p-2"
                         onClick={() => handleProduct(item._id)}
                       >
                         <div className="content-title text-xl font-bold mb-1">
@@ -121,7 +121,7 @@ const Books = () => {
                         ) ? (
                           <FaHeart
                             size={25}
-                            className={`absolute right-5 bottom-5 text-red-600`}
+                            className={`absolute right-5 bottom-5 xs:right-2 xs:bottom-2 text-red-600`}
                             onClick={(e) => {
                               deleteWishlist(item._id);
                             }}
@@ -129,7 +129,7 @@ const Books = () => {
                         ) : (
                           <FaHeart
                             size={25}
-                            className={`absolute right-5 bottom-5 text-black`}
+                            className={`absolute right-5 bottom-5 xs:right-2 xs:bottom-2`}
                             onClick={(e) => {
                               handleWishlist(item._id);
                             }}

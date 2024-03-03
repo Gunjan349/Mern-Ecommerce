@@ -12,10 +12,9 @@ import axios from "axios";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import SyncLoader from "react-spinners/SyncLoader";
 import { Link } from "react-router-dom";
-import API_URL from '../url'
+import API_URL from "../url";
 
 const CategoryPage = forwardRef(({ color, size }, ref) => {
-
   const navigate = useNavigate();
   const [data, setdata] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
@@ -27,14 +26,13 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
   const param = useParams();
   useEffect(() => {
     const headers = { authorization: localStorage.getItem("token") };
-    setSpinner(true)
+    setSpinner(true);
     axios
       .get(API_URL + "/category?catName=" + param.catName, {
         headers,
       })
 
       .then((res) => {
-        
         setdata(res.data.data);
         setSpinner(false);
       })
@@ -62,13 +60,12 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
   const handleWishlist = (productId) => {
     const ProductId = productId;
     const userId = localStorage.getItem("userId");
-   
+
     const _data = { productId: ProductId, userId };
     axios
       .post(API_URL + "/wishlist", _data)
 
       .then((res) => {
-       
         if (res.data.code === 200) {
           setRefresh(!refresh);
         }
@@ -117,17 +114,15 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
 
   useImperativeHandle(ref, () => ({
     handleColor() {
-      const colourData = { color: color , category : param.catName };
+      const colourData = { color: color, category: param.catName };
 
       axios
         .post(API_URL + "/category-color", colourData)
         .then((res) => {
-         
           if (res.data.data.length > 0 && res.data.code === 200) {
             setdata(res.data.data);
             setIsSearch(true);
           }
-          
         })
         .catch((err) => {
           console.log(err);
@@ -135,7 +130,7 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
     },
 
     handleSize() {
-      const sizeData = { size: size , category : param.catName};
+      const sizeData = { size: size, category: param.catName };
 
       axios
         .post(API_URL + "/category-size", sizeData)
@@ -144,9 +139,8 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
           if (res.data.data.length > 0) {
             setdata(res.data.data);
             setIsSearch(true);
-          }
-          else{
-            setdata("")
+          } else {
+            setdata("");
           }
         })
         .catch((err) => {
@@ -155,56 +149,58 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
     },
   }));
 
-
   return (
-    <div className="mx-16 lg:mx-8">
-      <div className="flex items center gap-x-10">
-        <Link to="/" className="p-3 bg-brown rounded-full w-fit text-white ">
-          <MdKeyboardDoubleArrowLeft size={25} />
-        </Link>
+    <div >
+      
         <Search search={search} handleSearch={handleSearch} />
-      </div>
+     
       <div className="wrapper bg-lightgrey mt-10 ">
-        <div className=" image-wrapper">
+        <div className=" image-wrapper mx:16 sm:mx-0">
           <div className="product-boxes grid grid-cols-4 gap-5 gap-y-16">
-            {data && data.length > 0 && data
-              .filter((item) => {
-                if (isSearch === true) {
-                  return item;
-                } else {
-                  return item;
-                }
-              })
-              .map((item, index) => {
-                return (
-                  <div className="relative overflow-hidden group">
-                    <img
-                      src={API_URL + `/${item.image}`}
-                      alt="img"
-                      className="rounded-md h-80"
-                     
-                    />
-                    <div className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%] bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white"  onClick={() => handleProduct(item._id)}>
-                    
-                      <div className="content-title text-xl font-bold mb-2 ">
-                        {item.Name}
-                      </div>
-                      <div className="content-desc">{item.description}</div>
-                      <ReactStars
-                        count={5}
-                        size={24}
-                        value={item.rating}
-                        edit={false}
-                        activeColor="#ffd700"
+            {data &&
+              data.length > 0 &&
+              data
+                .filter((item) => {
+                  if (isSearch === true) {
+                    return item;
+                  } else {
+                    return item;
+                  }
+                })
+                .map((item, index) => {
+                  return (
+                    <div className="relative overflow-hidden group h-80">
+                      <img
+                        src={API_URL + `/${item.image}`}
+                        alt="img"
+                        className="rounded-md h-full"
                       />
-                      <div className="price text-red-600 font-bold tracking-wide text-lg">Rs.{item.price}/-</div>
+                      <div
+                        className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%] bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white"
+                        onClick={() => handleProduct(item._id)}
+                      >
+                        <div className="content-title text-xl font-bold mb-2 ">
+                          {item.Name}
+                        </div>
+                        <div className="content-desc">{item.description}</div>
+                        <ReactStars
+                          count={5}
+                          size={24}
+                          value={item.rating}
+                          edit={false}
+                          activeColor="#ffd700"
+                        />
+                        <div className="price text-red-600 font-bold tracking-wide text-lg">
+                          Rs.{item.price}/-
+                        </div>
+                      </div>
                       <div>
                         {likedProducts.find(
                           (likedItems) => likedItems._id === item._id
                         ) ? (
                           <FaHeart
                             size={30}
-                            className={`absolute right-5 bottom-5 text-red-600`}
+                            className={`absolute right-5 bottom-5 xs:right-2 xs:bottom-2 text-red-600`}
                             onClick={(e) => {
                               deleteWishlist(item._id);
                             }}
@@ -212,7 +208,7 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
                         ) : (
                           <FaHeart
                             size={30}
-                            className={`absolute right-5 bottom-5 text-black`}
+                            className={`absolute right-5 bottom-5 xs:right-2 xs:bottom-2`}
                             onClick={(e) => {
                               handleWishlist(item._id);
                             }}
@@ -220,9 +216,8 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
                         )}
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
           </div>
         </div>
       </div>

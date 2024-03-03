@@ -93,6 +93,7 @@ const Products = forwardRef(({ color, size }, ref) => {
   };
 
   const handleSearch = (e) => {
+    
     setSearch(e);
     if (e === "") {
       setdata(data);
@@ -147,16 +148,13 @@ const Products = forwardRef(({ color, size }, ref) => {
   }));
 
   return (
-    <div className="products mx-16 lg:mx-8">
-      <div className="flex items center gap-x-10 sm:gap-x-6">
-        <Link to="/" className="p-3 bg-brown rounded-full w-fit text-white ">
-          <MdKeyboardDoubleArrowLeft size={25} />
-        </Link>
+    <div>
+      
         <Search search={search} handleSearch={handleSearch} />
-      </div>
+      
       <div className="wrapper bg-lightgrey mt-10 ">
-        <div className="image-wrapper">
-          <div className="product-boxes grid grid-cols-4 gap-x-5 gap-y-16 ">
+        <div className="image-wrapper mx-16 sm:mx-0 ">
+          <div className="product-boxes grid grid-cols-4 gap-x-5 gap-y-10 ">
             
             {data &&
               data.length > 0 &&
@@ -170,11 +168,11 @@ const Products = forwardRef(({ color, size }, ref) => {
                 })
                 .map((item, index) => {
                   return (
-                    <div className="relative overflow-hidden group">
+                    <div className="relative overflow-hidden group h-80">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
-                        className="rounded-md h-80"
+                        className="rounded-md h-full"
                       
                       />
                       <div className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%] bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white xs:p-1"
@@ -193,13 +191,14 @@ const Products = forwardRef(({ color, size }, ref) => {
                         <div className="price text-red-600 font-bold tracking-wide text-lg xs:font-normal">
                           Rs.{item.price}/-
                         </div>
+                        </div>
                         <div>
                           {likedProducts.find(
                             (likedItems) => likedItems._id === item._id
                           ) ? (
                             <FaHeart
                               size={25}
-                              className={`absolute right-5 bottom-5 text-red-600`}
+                              className={`absolute right-5 bottom-5 xs:right-2 xs:bottom-2 text-red-600`}
                               onClick={(e) => {
                                 deleteWishlist(item._id);
                               }}
@@ -207,14 +206,14 @@ const Products = forwardRef(({ color, size }, ref) => {
                           ) : (
                             <FaHeart
                               size={25}
-                              className={`absolute right-5 bottom-5 text-black`}
+                              className={`absolute right-5 bottom-5 xs:right-2 xs:bottom-2 text-black`}
                               onClick={(e) => {
                                 handleWishlist(item._id);
                               }}
                             />
                           )}
                         </div>
-                      </div>
+                     
                     </div>
                   );
                 })}

@@ -4,13 +4,13 @@ import ReactStars from "react-rating-stars-component";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import API_URL from '../url'
+import API_URL from "../url";
 
 const WomenWear = () => {
   const navigate = useNavigate();
   const [data, setdata] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
-  
+
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ const WomenWear = () => {
 
   return (
     <>
-      <div className="wrapper bg-lightgrey mt-20">
+      <div className="wrapper bg-lightgrey mt-16">
         <div className="heading font-bold mx-16 lg:mx-8 text-2xl xs:text-xl mb-6 underline underline-offset-4">
           <h4>Women's Fashion</h4>
         </div>
@@ -92,20 +92,22 @@ const WomenWear = () => {
               data.map((item, index) => {
                 if (item.category === "Women" && item.rating === 5) {
                   return (
-                    <div className="box1 relative overflow-hidden group">
+                    <div className="relative h-80 overflow-hidden group">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
-                        className="rounded-md"
+                        className="rounded-md h-full"
                       />
                       <div
-                        className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 xs:p-1 leading-8 group-hover:right-0 duration-700 text-white"
+                        className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 xs:p-2 leading-8 group-hover:right-0 duration-700 text-white"
                         onClick={() => handleProduct(item._id)}
                       >
                         <div className="content-title text-xl font-bold mb-1 xs:hidden">
                           {item.Name}
                         </div>
-                        <div className="content-desc leading-6">{item.description}</div>
+                        <div className="content-desc leading-6">
+                          {item.description}
+                        </div>
                         <ReactStars
                           count={5}
                           size={24}
@@ -113,7 +115,9 @@ const WomenWear = () => {
                           edit={false}
                           activeColor="#ffd700"
                         />
-                        <div className="price text-red-600 font-bold tracking-wide text-lg xs:font-normal">Rs.{item.price}/-</div>
+                        <div className="price text-red-600 font-bold tracking-wide text-lg xs:font-normal">
+                          Rs.{item.price}/-
+                        </div>
                       </div>
                       <div>
                         {likedProducts.find(
@@ -121,7 +125,7 @@ const WomenWear = () => {
                         ) ? (
                           <FaHeart
                             size={25}
-                            className={`absolute right-5 bottom-5 text-red-600`}
+                            className={`absolute right-5 bottom-5 xs:right-2 xs:bottom-2 text-red-600`}
                             onClick={(e) => {
                               deleteWishlist(item._id);
                             }}
@@ -129,7 +133,7 @@ const WomenWear = () => {
                         ) : (
                           <FaHeart
                             size={25}
-                            className={`absolute right-5 bottom-5 text-black`}
+                            className={`absolute right-5 bottom-5 xs:right-2 xs:bottom-2`}
                             onClick={(e) => {
                               handleWishlist(item._id);
                             }}

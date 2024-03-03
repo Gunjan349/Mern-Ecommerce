@@ -89,17 +89,15 @@ const Cart = () => {
 
   return (
     <>
-      <div className="mx-16">
+      <div className="">
         <div className="flex items center gap-x-6 mt-10">
-          <Link to="/" className="p-2 bg-brown rounded-full w-fit text-white ">
-            <MdKeyboardDoubleArrowLeft size={25} />
-          </Link>
-          <h1 className=" text-brown sm:text-xl text-3xl font-bold">
+          
+          <h1 className=" text-brown sm:text-xl text-3xl font-bold mx-16 lg:mx-8">
             Shopping Cart
           </h1>
         </div>
 
-        <div className="image-wrapper ">
+        <div className="image-wrapper mx-16 sm:mx-0">
           <div className="cart-content boxes grid  mt-12 grid-cols-2 gap-12 lg:gap-6">
             {data.length === 0 && (
               <h1 className=" text-2xl font-bold text-purple">
@@ -108,7 +106,7 @@ const Cart = () => {
             )}
             {data.map((item, index) => {
               return (
-                <div className="box1 flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
+                <div className=" flex bg-white h-80 rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5">
                   <img
                     src={API_URL + `/${item.image}`}
                     alt="img"
@@ -119,7 +117,7 @@ const Cart = () => {
                     <div className="content-title text-2xl font-bold mb-3 md:mb-0 leading-10 lg:leading-7 lg:text-xl md:text-lg">
                       {item.Name}
                     </div>
-                    <div className="content-desc1 my-3  xs:hidden">
+                    <div className="content-desc my-3  xs:hidden">
                       {item.description}
                     </div>
                     <div className="stars">
