@@ -37,7 +37,7 @@ const LandingPage = () => {
         </Link>
       </div>
 
-      <div className="home-heading relative  font-serif float-right mt-48 sm:mt-28 mb-28 xs:mb-12">
+      <div className="home-heading relative  font-serif float-right mt-48 sm:mt-56 mb-28 xs:mb-6">
         <p className="font-bold tracking-wide text-4xl sm:text-center">
           Wear Confidence With Style
         </p>
