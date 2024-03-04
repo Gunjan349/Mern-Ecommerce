@@ -24,7 +24,7 @@ const Header = () => {
           <div className="logo-div">
             <h3 className="text-4xl ">nearYou</h3>
           </div>
-          <div className="nav-right flex items-center gap-10  z-10">
+          <div className="nav-right flex absolute right-6 xs:right-4 items-center gap-10  z-10">
             <Link to="/login">
               <FaRegUser size={25} className="hover:scale-75 duration-500" />
             </Link>

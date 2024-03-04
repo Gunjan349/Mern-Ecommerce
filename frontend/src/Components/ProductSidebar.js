@@ -19,9 +19,9 @@ const ProductSidebar = () => {
 
   return (
     <>
-      <div className="flex">
+      <div className="grid">
         <buton
-          className="absolute bg-brown w-10 h-10 rounded-full flex justify-center items-center duration-300   text-white z-10 right-4 sm:right-0"
+          className="absolute bg-brown w-10 h-10 rounded-full flex justify-center items-center transition-all duration-1000   text-white z-10 right-16 sm:right-2"
           onClick={toggle}
         >
           <IoIosArrowBack />
@@ -29,8 +29,8 @@ const ProductSidebar = () => {
         </buton>
         <div
           className={`sidebar ${
-            open ? "w-72" : "w-0"
-          }  duration-700 ease-in-out sm:${open && "w-screen"}
+            open ? "w-screen" : "w-0"
+          } transition-all  duration-1000 ease-in-out
           `}
         >
           <div
@@ -83,7 +83,7 @@ const ProductSidebar = () => {
             </div>
           </div>
         </div>
-        <div className={`sm:${open && 'hidden'}`}>
+        <div className={`${open ? "mt-16" : "mt-0"}`}>
           <Products  color={changeColor} size={changeSize} ref={productRef} />
         </div>
       </div>

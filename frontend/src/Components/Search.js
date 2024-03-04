@@ -4,7 +4,7 @@ import { IoIosSearch } from "react-icons/io";
 const Search = (props) => {
   return (
     <>
-      <div className="search ml-20 lg:ml-8 mr-24 bg-purple px-4 py-2 rounded-full flex items-center group">
+      <div className="search ml-20 lg:ml-4 mr-24 md:mr-16 bg-purple px-4 py-2 rounded-full flex items-center group">
         <a className="btn" href="#">
           <IoIosSearch size={32} className="text-white" />
         </a>

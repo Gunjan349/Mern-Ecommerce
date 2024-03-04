@@ -12,7 +12,7 @@ import HomeAppliances from "./HomeAppliances";
 import Toys from "./Toys";
 import FeaturedCollection from "./FeaturedCollection";
 import Books from "./Books";
-import Mobiles from "./Mobiles";
+import Mobiles from "./Mobiles"
 
 const LandingPage = () => {
   return (
@@ -28,7 +28,7 @@ const LandingPage = () => {
          
         </div>
       </div>
-      <div className="relative float-right mt-3 text-brown flex items-center gap-x-10 mr-3 xs:mr-1">
+      <div className="relative float-right mt-2 text-brown flex items-center gap-x-10 mr-6 xs:mr-4">
         <Link className="wishlist" to="/wishist">
           <FaRegHeart size={25} className="hover:scale-75 duration-500" />
         </Link>

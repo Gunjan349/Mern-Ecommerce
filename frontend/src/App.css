@@ -15,10 +15,7 @@ a{
     display: inline-block;
 }
 
-.nav-right{
-    right: 1.5%;
-     position: absolute;
- }
+
  
 
  @media (min-width:768px) and (max-width:976px) {
