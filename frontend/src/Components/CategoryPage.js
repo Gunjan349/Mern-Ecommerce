@@ -156,7 +156,7 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
      
       <div className="wrapper bg-lightgrey mt-10 ">
         <div className=" image-wrapper mx:16 sm:mx-0">
-          <div className="product-boxes grid grid-cols-4 gap-5 gap-y-16">
+          <div className="product-boxes grid grid-cols-4 gap-x-5 gap-y-10 sm:gap-x-3">
             {data &&
               data.length > 0 &&
               data
@@ -221,7 +221,7 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
           </div>
         </div>
       </div>
-      <div className="spinner absolute ml-[45rem]">
+      <div className="spinner absolute ml-[45rem] sm:ml-[12rem]">
         {spinner && <SyncLoader color={"#e36422"} loading={spinner} />}
       </div>
     </div>
