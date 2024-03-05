@@ -3,27 +3,17 @@ import ReactStars from "react-rating-stars-component";
 import { Link, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
-import API_URL from '../url'
-import {toast} from "react-toastify";
+import API_URL from "../url";
+import { toast } from "react-toastify";
 
 const ProductPage = () => {
   const [data, setdata] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
- 
-  const copyToClipboard = (text) => {
-    
-    var textField = document.createElement("textarea");
-    textField.innerText = text;
-    document.body.appendChild(textField);
-    textField.select();
-    document.execCommand("copy");
-    textField.remove();
-  };
+  const token = localStorage.getItem("token");
 
   const param = useParams();
- 
 
   useEffect(() => {
     const headers = { authorization: localStorage.getItem("token") };
@@ -32,7 +22,6 @@ const ProductPage = () => {
       .get(API_URL + "/get-product/" + param.id, { headers })
 
       .then((res) => {
-       
         setdata(res.data.data);
       })
       .catch((err) => {
@@ -41,31 +30,30 @@ const ProductPage = () => {
   }, [refresh]);
 
   useEffect(() => {
-    const _data = { userId: localStorage.getItem("userId") };
-    axios
-      .post(API_URL + "/get-wishlist", _data)
-      .then((res) => {
-        setLikedProducts(res.data.data.wishlist);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (token) {
+      const _data = { userId: localStorage.getItem("userId") };
+      axios
+        .post(API_URL + "/get-wishlist", _data)
+        .then((res) => {
+          setLikedProducts(res.data.data.wishlist);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [refresh]);
-
-  
 
   const handleAddToCart = (productId) => {
     const ProductId = productId;
     const userId = localStorage.getItem("userId");
-   
+
     const _data = { productId: ProductId, userId };
     axios
       .post(API_URL + "/user-cart", _data)
 
       .then((res) => {
-       
         if (res.data.code === 200) {
-          toast.success("Product added to cart")
+          toast.success("Product added to cart");
           setRefresh(!refresh);
         }
       })
@@ -75,42 +63,48 @@ const ProductPage = () => {
   };
 
   const handleWishlist = (productId) => {
-    const ProductId = productId;
-    const userId = localStorage.getItem("userId");
-    
-    const _data = { productId: ProductId, userId };
-    axios
-      .post(API_URL + "/wishlist", _data)
+    if (token) {
+      const ProductId = productId;
+      const userId = localStorage.getItem("userId");
 
-      .then((res) => {
-       
-        if (res.data.code === 200) {
-          setRefresh(!refresh);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      const _data = { productId: ProductId, userId };
+      axios
+        .post(API_URL + "/wishlist", _data)
+
+        .then((res) => {
+          if (res.data.code === 200) {
+            setRefresh(!refresh);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast.error("Please login first.");
+    }
   };
 
   const deleteWishlist = (productId) => {
-    const ProductId = productId;
-    const userId = localStorage.getItem("userId");
+    if (token) {
+      const ProductId = productId;
+      const userId = localStorage.getItem("userId");
 
-    const _data = { productId: ProductId, userId };
-    axios
-      .post(API_URL + "/delete-wishlist", _data)
+      const _data = { productId: ProductId, userId };
+      axios
+        .post(API_URL + "/delete-wishlist", _data)
 
-      .then((res) => {
-        if (res.data.code === 200) {
-          setRefresh(!refresh);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          if (res.data.code === 200) {
+            setRefresh(!refresh);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      toast.error("Please login first.");
+    }
   };
-  
 
   return (
     <>
@@ -147,7 +141,6 @@ const ProductPage = () => {
               )}
               <p className="text-lg text-gray-500">(Based on 50% reviews)</p>
             </div>
-           
 
             <div className="flex gap-x-2">
               <h1 className="font-bold text-lg">Avaibility :</h1>
@@ -213,7 +206,6 @@ const ProductPage = () => {
                 ) : (
                   <FaHeart
                     size={30}
-                    
                     onClick={(e) => {
                       handleWishlist(data._id);
                     }}
@@ -221,20 +213,8 @@ const ProductPage = () => {
                 )}
               </div>
             </div>
-            <div className="share flex mt-3 gap-x-3">
-              <h3 className="font-bold text-lg-">Share :</h3>
-              <a
-                href="javascrip:void(0);"
-                onClick={() => {
-                  copyToClipboard("link");
-                }}
-              >
-                Copy Link
-              </a>
-            </div>
           </div>
         </div>
-        
       </div>
     </>
   );
