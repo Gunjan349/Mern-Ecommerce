@@ -12,6 +12,8 @@ const BestSellers = () => {
   const [likedProducts, setLikedProducts] = useState([]);
   const [refresh, setRefresh] = useState(false);
 
+  const token  = localStorage.getItem('token')
+
   useEffect(() => {
     const headers = { authorization: localStorage.getItem("token") };
 
@@ -28,6 +30,7 @@ const BestSellers = () => {
   }, [refresh]);
 
   useEffect(() => {
+   if(token){
     const _data = { userId: localStorage.getItem("userId") };
     axios
       .post(API_URL + "/get-wishlist", _data)
@@ -37,6 +40,7 @@ const BestSellers = () => {
       .catch((err) => {
         console.log(err);
       });
+   }
   }, [refresh]);
 
   const handleAddToCart = (productId) => {
@@ -60,7 +64,8 @@ const BestSellers = () => {
   };
 
   const handleWishlist = (productId) => {
-    const ProductId = productId;
+    if(token){
+      const ProductId = productId;
     const userId = localStorage.getItem("userId");
   
     const _data = { productId: ProductId, userId };
@@ -69,20 +74,26 @@ const BestSellers = () => {
 
       .then((res) => {
         
-        if (res.data.code == 200) {
+        if (res.data.code === 200) {
           setRefresh(!refresh);
         }
       })
       .catch((err) => {
         console.log(err);
       });
+    }
+    else{
+      toast.error("Please login first")
+    }
   };
 
   const handleProduct = (productId) => {
     navigate("/product/" + productId);
   };
   const deleteWishlist = (productId) => {
-    const ProductId = productId;
+    if(token)
+    {
+      const ProductId = productId;
     const userId = localStorage.getItem("userId");
 
     const _data = { productId: ProductId, userId };
@@ -97,6 +108,10 @@ const BestSellers = () => {
       .catch((err) => {
         console.log(err);
       });
+    }
+    else{
+      toast.error("Please login first")
+    }
   };
 
   return (

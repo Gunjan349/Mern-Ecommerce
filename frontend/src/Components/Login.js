@@ -14,7 +14,12 @@ const Login = () => {
     const data = {email : userEmail , password : userPassword}
     axios.post(API_URL + "/login" , data)
     .then((res) =>{
-      toast.success(res.data.message)
+      if(res.data.code === 200){
+        toast.success(res.data.message)
+      }
+      else{
+        toast.error(res.data.message)
+      }
       if(res.data.token){
         navigate("/");
         localStorage.setItem("token" , res.data.token);

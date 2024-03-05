@@ -302,7 +302,6 @@ module.exports.addToWishlist = async (req, res) => {
     return res.send({
       code: 200,
       message: "product added to WISHLIST",
-      data: update,
     });
   } else {
     return res.send({ code: 400, message: "product not added to wishlist" });

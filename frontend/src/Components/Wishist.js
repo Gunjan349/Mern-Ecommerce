@@ -153,7 +153,7 @@ const Wishlist = () => {
                 );
               })}
             </div>
-            <Link to="/" className="flex gap-x-1 sm:mx-6 mx-16 mt-10 items-center">
+            <Link to="/" className="flex gap-x-1 sm:mx-6 mt-10 items-center">
               <GoArrowLeft size={25} className="text-brown"/>
               <h1 className="text-brown text-xl font-bold">Continue Shopping</h1>
             </Link>

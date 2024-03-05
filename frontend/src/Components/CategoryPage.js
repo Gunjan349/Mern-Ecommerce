@@ -9,10 +9,9 @@ import ReactStars from "react-rating-stars-component";
 import { FaHeart } from "react-icons/fa";
 import Search from "./Search";
 import axios from "axios";
-import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import SyncLoader from "react-spinners/SyncLoader";
-import { Link } from "react-router-dom";
 import API_URL from "../url";
+import { toast } from "react-toastify";
 
 const CategoryPage = forwardRef(({ color, size }, ref) => {
   const navigate = useNavigate();
@@ -22,6 +21,8 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
   const [search, setSearch] = useState("");
   const [isSearch, setIsSearch] = useState(false);
   const [spinner, setSpinner] = useState(false);
+
+  const token = localStorage.getItem("token");
 
   const param = useParams();
   useEffect(() => {
@@ -42,6 +43,7 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
   }, [refresh]);
 
   useEffect(() => {
+   if(token){
     const _data = { userId: localStorage.getItem("userId") };
     axios
       .post(API_URL + "/get-wishlist", _data)
@@ -51,6 +53,7 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
       .catch((err) => {
         console.log(err);
       });
+   }
   }, [refresh]);
 
   const handleProduct = (productId) => {
@@ -58,7 +61,8 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
   };
 
   const handleWishlist = (productId) => {
-    const ProductId = productId;
+    if(token){
+      const ProductId = productId;
     const userId = localStorage.getItem("userId");
 
     const _data = { productId: ProductId, userId };
@@ -73,9 +77,14 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
       .catch((err) => {
         console.log(err);
       });
+    }
+    else{
+      toast.error("Please login first")
+    }
   };
 
   const deleteWishlist = (productId) => {
+   if(token){
     const ProductId = productId;
     const userId = localStorage.getItem("userId");
 
@@ -91,6 +100,10 @@ const CategoryPage = forwardRef(({ color, size }, ref) => {
       .catch((err) => {
         console.log(err);
       });
+   }
+   else{
+    toast.error("Please login first")
+   }
   };
 
   const handleSearch = (e) => {

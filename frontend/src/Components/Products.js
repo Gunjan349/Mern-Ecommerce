@@ -9,10 +9,9 @@ import ReactStars from "react-rating-stars-component";
 import { FaHeart } from "react-icons/fa";
 import Search from "./Search";
 import axios from "axios";
-import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
-import { Link } from "react-router-dom";
 import SyncLoader from "react-spinners/SyncLoader";
 import API_URL from '../url'
+import { toast } from "react-toastify";
 
 const Products = forwardRef(({ color, size }, ref) => {
   const navigate = useNavigate();
@@ -23,6 +22,8 @@ const Products = forwardRef(({ color, size }, ref) => {
   const [spinner, setSpinner] = useState(false);
 
   const [isSearch, setIsSearch] = useState(false);
+
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     const headers = { authorization: localStorage.getItem("token") };
@@ -40,7 +41,8 @@ const Products = forwardRef(({ color, size }, ref) => {
   }, [refresh]);
 
   useEffect(() => {
-    const _data = { userId: localStorage.getItem("userId") };
+    if(token){
+      const _data = { userId: localStorage.getItem("userId") };
     axios
       .post(API_URL + "/get-wishlist", _data)
       .then((res) => {
@@ -49,6 +51,7 @@ const Products = forwardRef(({ color, size }, ref) => {
       .catch((err) => {
         console.log(err);
       });
+    }
   }, [refresh]);
 
   const handleProduct = (productId) => {
@@ -56,6 +59,7 @@ const Products = forwardRef(({ color, size }, ref) => {
   };
 
   const handleWishlist = (productId) => {
+   if(token){
     const ProductId = productId;
     const userId = localStorage.getItem("userId");
     
@@ -72,9 +76,14 @@ const Products = forwardRef(({ color, size }, ref) => {
       .catch((err) => {
         console.log(err);
       });
+   }
+   else{
+    toast.error("Please login first")
+   }
   };
 
   const deleteWishlist = (productId) => {
+   if(token){
     const ProductId = productId;
     const userId = localStorage.getItem("userId");
 
@@ -90,6 +99,10 @@ const Products = forwardRef(({ color, size }, ref) => {
       .catch((err) => {
         console.log(err);
       });
+   }
+   else{
+    toast.error("Please login first")
+   }
   };
 
   const handleSearch = (e) => {
@@ -154,7 +167,7 @@ const Products = forwardRef(({ color, size }, ref) => {
       
       <div className="wrapper bg-lightgrey mt-10 ">
         <div className="image-wrapper mx-16 sm:mx-0 ">
-          <div className="product-boxes grid grid-cols-4 gap-x-5 gap-y-10 sm:gap-x-3">
+          <div className="product-boxes grid grid-cols-4 gap-x-5 gap-y-10 sm:gap-x-2">
             
             {data &&
               data.length > 0 &&

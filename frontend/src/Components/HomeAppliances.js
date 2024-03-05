@@ -5,6 +5,7 @@ import { FaHeart } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import API_URL from '../url'
+import { toast } from "react-toastify";
 
 const HomeAppliances = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ const HomeAppliances = () => {
   const [likedProducts, setLikedProducts] = useState([]);
   console.log(likedProducts);
   const [refresh, setRefresh] = useState(false);
+
+  const token = localStorage.getItem('token')
 
   useEffect(() => {
     const headers = { authorization: localStorage.getItem("token") };
@@ -28,7 +31,8 @@ const HomeAppliances = () => {
   }, [refresh]);
 
   useEffect(() => {
-    const _data = { userId: localStorage.getItem("userId") };
+    if(token){
+      const _data = { userId: localStorage.getItem("userId") };
     axios
       .post(API_URL + "/get-wishlist", _data)
       .then((res) => {
@@ -37,6 +41,7 @@ const HomeAppliances = () => {
       .catch((err) => {
         console.log(err);
       });
+    }
   }, [refresh]);
 
   const handleProduct = (productId) => {
@@ -44,7 +49,8 @@ const HomeAppliances = () => {
   };
 
   const handleWishlist = (productId) => {
-    const ProductId = productId;
+    if(token){
+      const ProductId = productId;
     const userId = localStorage.getItem("userId");
 
     const _data = { productId: ProductId, userId };
@@ -59,10 +65,15 @@ const HomeAppliances = () => {
       .catch((err) => {
         console.log(err);
       });
+    }
+    else{
+      toast.error("Please login first.")
+    }
   };
 
   const deleteWishlist = (productId) => {
-    const ProductId = productId;
+    if(token){
+      const ProductId = productId;
     const userId = localStorage.getItem("userId");
 
     const _data = { productId: ProductId, userId };
@@ -77,6 +88,10 @@ const HomeAppliances = () => {
       .catch((err) => {
         console.log(err);
       });
+    }
+    else{
+      toast.error("Please login first.")
+    }
   };
 
   return (
@@ -86,7 +101,7 @@ const HomeAppliances = () => {
           <h4>Home Appliances</h4>
         </div>
         <div className="image-wrapper  mx-16 sm:mx-0">
-          <div className="fashion-boxes grid grid-cols-4 gap-5 ">
+          <div className="fashion-boxes grid grid-cols-4 gap-5 xs:gap-x-2">
             {data &&
               data.length > 0 &&
               data.map((item, index) => {
