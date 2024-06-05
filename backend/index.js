@@ -9,7 +9,6 @@ const morgan = require('morgan');
 const multer = require('multer');
 const upload = multer({dest:'uploads/'})
 
-console.log(process.env.CONNECTION_STRING);
 mongoose.set('strictQuery',false);
 mongoose.connect(process.env.CONNECTION_STRING)
 .then(()=>{console.log('connected to db')})
@@ -34,6 +33,7 @@ app.use(morgan('dev'));
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads' , express.static('uploads'));
 
