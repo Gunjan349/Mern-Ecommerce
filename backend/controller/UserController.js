@@ -39,9 +39,11 @@ module.exports.signUp = async (req, res) => {
       phone,
       roles,
     });
+   
     const savedUser = await newUser.save();
+   
     if (savedUser) {
-      res.send({ code: 200, message: "User saved" });
+      res.send({ code: 200, message: "User saved", password:  password });
     } else {
       res.send({ code: 500, message: "server error" });
     }
@@ -51,10 +53,10 @@ module.exports.signUp = async (req, res) => {
 // login user
 
 module.exports.login = async (req, res) => {
-  
+ 
   const password = req.body.password;
   const email = req.body.email;
-
+  
   if (!password) {
     return res.send({ code: 400, message: "password required" });
   } else if (!email) {
@@ -63,7 +65,7 @@ module.exports.login = async (req, res) => {
     const isNameExists = await userModel
       .findOne({ email: email })
       .populate("roles");
-
+   
     if (isNameExists) {
       if (isNameExists.password === password) {
         
@@ -87,7 +89,7 @@ module.exports.login = async (req, res) => {
           user: isNameExists,
         });
       } else {
-        res.send({ code: 404, message: "password is not correct" });
+        res.send({ code: 404, message: "password is not correct"});
       }
     } else {
       return res.send({ code: 404, message: "user is not found" });

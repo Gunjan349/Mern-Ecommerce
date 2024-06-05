@@ -32,6 +32,7 @@ const Signup = () => {
     axios
       .post(API_URL + '/signup', data)
       .then((res) => {
+        
         if (res.data.code===200) {
           toast.success("Signed up successfully")
           navigate("/login");
