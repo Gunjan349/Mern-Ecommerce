@@ -2,19 +2,22 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import API_URL from '../url'
+import API_URL from '../url';
+import SyncLoader from "react-spinners/ClipLoader";
 
 const Login = () => {
   const navigate = useNavigate();
   const [userEmail , setUserEmail] =useState('');
   const [userPassword , setUserPassword] =useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) =>{
     e.preventDefault();
+    setLoading(true);
     const data = {email : userEmail , password : userPassword}
     axios.post(API_URL + "/login" , data)
     .then((res) =>{
-    
+      setLoading(false);
       if(res.data.code === 200){
         toast.success(res.data.message)
       }
@@ -30,6 +33,7 @@ const Login = () => {
       }
     })
     .catch((err) =>{
+       setLoading(false);
        console.log(err);
  
     })
@@ -73,7 +77,11 @@ const Login = () => {
               </div>
               <div className="flex gap-x-7 justify-center">
                 <button className="text-white bg-brown rounded-lg hover:bg-lightpurple py-2 px-3" onClick={handleSubmit}>
-                  Login
+                {loading ? (
+                    <SyncLoader color={"#ffffff"} loading={loading} size={20} />
+                  ) : (
+                    "Login"
+                  )}
                 </button>
                 <Link
                   to="/signup"

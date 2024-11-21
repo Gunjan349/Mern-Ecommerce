@@ -15,9 +15,10 @@ a{
     display: inline-block;
 }
 
-
+.rfm-marquee{
+    min-width: 93% !important;
+}
  
-
  @media (min-width:768px) and (max-width:976px) {
     .map , .contact-form   , .product-form ,.main-product{
         margin-left: 6rem;

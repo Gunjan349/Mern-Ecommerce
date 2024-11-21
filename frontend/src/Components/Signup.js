@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import API_URL from '../url'
+import API_URL from "../url";
+import SyncLoader from "react-spinners/ClipLoader";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -10,17 +11,15 @@ const Signup = () => {
   const [userMobile, setUserMobile] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
-  const [userType , setUserType] = useState("user");
-  
- 
-  const handlesignup = (e) =>{
-    e.preventDefault();
-    toast.info("Signing up as Admin")
-    setUserType("seller");
-   
-  }
+  const [userType, setUserType] = useState("user");
+  const [loading, setLoading] = useState(false);
+
+  const handleUserTypeChange = () => {
+    setUserType((prevType) => (prevType === "user" ? "seller" : "user"));
+  };
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     const data = {
       email: userEmail,
@@ -29,22 +28,23 @@ const Signup = () => {
       Name: userName,
       type: userType,
     };
+
     axios
-      .post(API_URL + '/signup', data)
+      .post(API_URL + "/signup", data)
       .then((res) => {
-        
-        if (res.data.code===200) {
-          toast.success("Signed up successfully")
+        setLoading(false);
+        if (res.data.code === 200) {
+          toast.success("Signed up successfully");
           navigate("/login");
-        }
-        else{
-          toast.error(res.data.message)
-          if(res.data.message === "User already exists"){
-            navigate("/login")
+        } else {
+          toast.error(res.data.message);
+          if (res.data.code === 201) {
+            navigate("/login");
           }
         }
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   };
@@ -52,7 +52,7 @@ const Signup = () => {
   return (
     <>
       <div className="text-center">
-        <div className="login bg-white inline-block shadow-lg justify-center mt-20 rounded-lg  py-3">
+        <div className="login bg-white inline-block shadow-lg justify-center mt-20 rounded-lg py-3">
           <div className="login-form w-full px-10 flex flex-col gap-y-10">
             <h1 className="font-medium tracking-wide text-lg text-center">
               New here? Create Account
@@ -103,8 +103,15 @@ const Signup = () => {
                     }}
                   />
                 </div>
-                <div>
-                  <button onClick={handlesignup} className="text-xl">Signup as ADMIN</button>
+                <div className="flex items-center gap-x-2">
+                  <input
+                    type="checkbox"
+                    id="signupAsAdmin"
+                    onChange={handleUserTypeChange}
+                  />
+                  <label htmlFor="signupAsAdmin" className="text-sm">
+                    Signup as Admin
+                  </label>
                 </div>
               </div>
               <div className="flex gap-x-10 my-4 justify-center">
@@ -112,7 +119,11 @@ const Signup = () => {
                   className="text-white bg-brown rounded-full hover:bg-lightpurple py-2 px-5"
                   onClick={handleSubmit}
                 >
-                  Create
+                  {loading ? (
+                    <SyncLoader color={"#ffffff"} loading={loading} size={20} />
+                  ) : (
+                    "Signup"
+                  )}
                 </button>
               </div>
             </form>

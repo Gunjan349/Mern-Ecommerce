@@ -6,41 +6,45 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import API_URL from '../url'
 import { toast } from "react-toastify";
+import SyncLoader from "react-spinners/ClipLoader";
 
 const HomeAppliances = () => {
   const navigate = useNavigate();
   const [data, setdata] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
-  console.log(likedProducts);
+  const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
   const token = localStorage.getItem('token')
 
   useEffect(() => {
+    setLoading(true);
     const headers = { authorization: localStorage.getItem("token") };
 
     axios
       .get(API_URL + "/get-products", { headers })
 
       .then((res) => {
+        setLoading(false);
         setdata(res.data.data);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   }, [refresh]);
 
   useEffect(() => {
-    if(token){
+    if (token) {
       const _data = { userId: localStorage.getItem("userId") };
-    axios
-      .post(API_URL + "/get-wishlist", _data)
-      .then((res) => {
-        setLikedProducts(res.data.data.wishlist);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      axios
+        .post(API_URL + "/get-wishlist", _data)
+        .then((res) => {
+          setLikedProducts(res.data.data.wishlist);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [refresh]);
 
@@ -49,47 +53,47 @@ const HomeAppliances = () => {
   };
 
   const handleWishlist = (productId) => {
-    if(token){
+    if (token) {
       const ProductId = productId;
-    const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
 
-    const _data = { productId: ProductId, userId };
-    axios
-      .post(API_URL + "/wishlist", _data)
+      const _data = { productId: ProductId, userId };
+      axios
+        .post(API_URL + "/wishlist", _data)
 
-      .then((res) => {
-        if (res.data.code === 200) {
-          setRefresh(!refresh);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          if (res.data.code === 200) {
+            setRefresh(!refresh);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    else{
+    else {
       toast.error("Please login first.")
     }
   };
 
   const deleteWishlist = (productId) => {
-    if(token){
+    if (token) {
       const ProductId = productId;
-    const userId = localStorage.getItem("userId");
+      const userId = localStorage.getItem("userId");
 
-    const _data = { productId: ProductId, userId };
-    axios
-      .post(API_URL + "/delete-wishlist", _data)
+      const _data = { productId: ProductId, userId };
+      axios
+        .post(API_URL + "/delete-wishlist", _data)
 
-      .then((res) => {
-        if (res.data.code === 200) {
-          setRefresh(!refresh);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          if (res.data.code === 200) {
+            setRefresh(!refresh);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    else{
+    else {
       toast.error("Please login first.")
     }
   };
@@ -101,6 +105,9 @@ const HomeAppliances = () => {
           <h4>Home Appliances</h4>
         </div>
         <div className="image-wrapper  mx-16 sm:mx-0">
+          <div className=" flex justify-center z-20">
+            <SyncLoader className="my-16" color={"#000000"} loading={loading} size={60} />
+          </div>
           <div className="fashion-boxes grid grid-cols-4 gap-5 xs:gap-x-2">
             {data &&
               data.length > 0 &&
@@ -158,12 +165,13 @@ const HomeAppliances = () => {
                 }
               })}
           </div>
+          <div className="see-more mt-5 text-sky-800 text-xl">
+            <Link to="/category/Electronics" className="hover:text-brown ">
+              Explore Now
+            </Link>
+          </div>
         </div>
-        <div className="see-more mt-5 text-sky-800 text-xl">
-          <Link to="/category/Electronics" className="hover:text-brown ">
-            Explore Now
-          </Link>
-        </div>
+
       </div>
     </>
   );

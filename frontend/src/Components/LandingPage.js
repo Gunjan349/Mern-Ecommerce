@@ -16,14 +16,14 @@ import Mobiles from "./Mobiles"
 
 const LandingPage = () => {
   return (
-    <>
+    <div className="overflow-x-hidden">
       <div>
         <Navbar className="relative" />
 
         <div className="absolute">
           
-            <div className="w-screen">
-              <img src="images/fashion4.jpg" className="w-full" />
+            <div className="w-[98.9vw]">
+              <img src="images/fashion4.webp" className="w-full" loading="lazy" />
             </div>
          
         </div>
@@ -60,7 +60,7 @@ const LandingPage = () => {
       <FeaturedCollection />
       <HomeAppliances />
       <Mobiles />
-    </>
+    </div>
   );
 };
 

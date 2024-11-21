@@ -13,27 +13,21 @@ module.exports.signUp = async (req, res) => {
   const email = req.body.email;
   const phone = req.body.phone;
   const type = req.body.type || "user";
-  const findUser = await userModel.findOne({ email: email });
+  const findEmail = await userModel.findOne({ email: email });
+  const findPhone = await userModel.findOne({ phone: phone });
 
   const roleData = await rolesModel.findOne({ role : type });
   console.log(roleData);
   const roles = [roleData._id];
 
-  if (!Name) {
-    return res.send({ code: 400, message: "Name required" });
-  } else if (!password) {
-    return res.send({ code: 400, message: "Password required" });
-  } else if (!email) {
-    return res.send({ code: 400, message: "Email required" });
-  } else if (!phone) {
-    return res.send({ code: 400, message: "Phone number required" });
-  } else if (findUser) {
-    return res.send({code:400 , message: "User already exists"});
+  if (!Name || !password || !email || !phone) {
+    return res.send({ code: 400, message: "All fields are required" });
+  } else if (findEmail || findPhone) {
+    return res.send({code:201 , message: "User already exists! Please login"});
   } else {
     const newUser = new userModel({
       Name,
       password,
-      
       type,
       email,
       phone,

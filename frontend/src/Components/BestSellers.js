@@ -3,28 +3,31 @@ import { useNavigate } from "react-router-dom";
 import ReactStars from "react-rating-stars-component";
 import { FaHeart } from "react-icons/fa";
 import axios from "axios";
-import {toast} from 'react-toastify'
-import API_URL from '../url'
+import {toast} from 'react-toastify';
+import SyncLoader from "react-spinners/ClipLoader";
+import API_URL from '../url'; 
 
 const BestSellers = () => {
   const navigate = useNavigate();
   const [data, setdata] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const token  = localStorage.getItem('token')
 
   useEffect(() => {
+    setLoading(true);
     const headers = { authorization: localStorage.getItem("token") };
-
+  
     axios
       .get(API_URL + "/get-products", { headers })
-
       .then((res) => {
-       
+        setLoading(false);
         setdata(res.data.data);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   }, [refresh]);
@@ -122,13 +125,16 @@ const BestSellers = () => {
         </div>
 
         <div className="image-wrapper mx-16 sm:mx-0">
+        <div className=" flex justify-center z-20">
+        <SyncLoader className="my-16" color={"#000000"} loading={loading} size={60} /> 
+        </div>
           <div className="bestsellers grid grid-cols-2 gap-12 lg:gap-6">
             {data &&
-              data.length > 0 &&
+              data.length > 0 &&  
               data.map((item, index) => {
                 if (item.price < 100 && item.rating === 5) {
                   return (
-                    <div className="relative flex bg-white rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5 xs:pl-0">
+                    <div key={index} className="relative flex bg-white rounded-md p-8 shadow-[0_35px_30px_-15px_rgba(0,0,0,0.3)] lg:p-5 xs:pl-0">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
@@ -193,7 +199,8 @@ const BestSellers = () => {
                     </div>
                   );
                 }
-              })}
+              }) 
+                  }
           </div>
         </div>
       </div>

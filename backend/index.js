@@ -17,17 +17,12 @@ mongoose.connect(process.env.CONNECTION_STRING)
 
 const bodyParser = require('body-parser');
 
-
 const product = require('./controller/productController');
 const user = require('./controller/UserController');
 const roles= require('./controller/RolesController');
 const middleware= require ('./middleware/authorization');
 const payment = require('./controller/paymentController')
 const contact = require('./controller/contactController');
-
-
-
-
 
 app.use(morgan('dev'));
 app.use(cors());
@@ -74,8 +69,6 @@ app.post('/contact' , contact.contactForm);
 // payment
 app.post('/orders' , payment.orders);
 app.post('/verify' , payment.verify);
-
-
 
 app.listen(port,()=>{
     console.log(`backend is running ${port}`);

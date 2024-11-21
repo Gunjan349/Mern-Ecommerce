@@ -6,25 +6,29 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import API_URL from "../url";
 import { toast } from "react-toastify";
+import SyncLoader from "react-spinners/ClipLoader";
 
 const WomenWear = () => {
   const navigate = useNavigate();
   const [data, setdata] = useState([]);
   const [likedProducts, setLikedProducts] = useState([]);
   const token = localStorage.getItem('token');
-
+  const [loading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
+    setLoading(true);
     const headers = { authorization: localStorage.getItem("token") };
 
     axios
       .get(API_URL + "/get-products", { headers })
 
       .then((res) => {
+        setLoading(false);
         setdata(res.data.data);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
   }, [refresh]);
@@ -100,6 +104,9 @@ const WomenWear = () => {
           <h4>Women's Fashion</h4>
         </div>
         <div className="image-wrapper mx-16 sm:mx-0">
+        <div className=" flex justify-center z-20">
+            <SyncLoader className="my-16" color={"#000000"} loading={loading} size={60} />
+          </div>
           <div className="fashion-boxes grid grid-cols-4 gap-5 xs:gap-x-2">
             {data &&
               data.length > 0 &&
@@ -159,12 +166,13 @@ const WomenWear = () => {
                 }
               })}
           </div>
-        </div>
-        <div className="see-more mt-5 text-sky-800 text-xl">
+          <div className="see-more mt-5 text-sky-800 text-xl">
           <Link to="/category/Women" className="hover:text-brown ">
             Explore Now
           </Link>
         </div>
+        </div>
+        
       </div>
     </>
   );

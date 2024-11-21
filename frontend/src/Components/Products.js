@@ -233,7 +233,7 @@ const Products = forwardRef(({ color, size }, ref) => {
           </div>
         </div>
       </div>
-      <div className="spinner absolute ml-[45rem] sm:ml-[12rem]">
+      <div className="spinner absolute ml-[45rem] sm:ml-[11rem]">
         {spinner && <SyncLoader color={"#e36422"} loading={spinner} />}
       </div>
     </div>

@@ -11,7 +11,7 @@ const HomeMarquee = () =>{
         <>
             <Marquee className="py-5 fixed bg-white">
                 
-                    <div className="delivery flex gap-4 items-center px-16">
+                    <div className="delivery flex gap-4 items-center pr-16">
                         <TbTruckDelivery size={30}/>
                         <div>
                         <p className='font-bold'>Free Delivery</p>
@@ -39,7 +39,7 @@ const HomeMarquee = () =>{
                        
                        </div>
                     </div>
-                    <div className="payment flex gap-4 items-center px-16">
+                    <div className="payment flex gap-4 items-center pl-16">
                         <FaRegCreditCard size={30}/>
                        <div>
                        <p className='font-bold'>Secure Payment</p>

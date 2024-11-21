@@ -1,6 +1,6 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { TwitterPicker } from "react-color";
 import Colors from "./Colors";
 import categories from "./Categories";
@@ -9,29 +9,24 @@ import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import { MdKeyboardDoubleArrowLeft } from "react-icons/md";
 import { Link } from "react-router-dom";
-import API_URL from '../url'
-
+import API_URL from "../url";
 
 const AddProduct = () => {
-
-
   const navigate = useNavigate();
 
-
   useEffect(() => {
-     const token  = localStorage.getItem("token");
-     const type = localStorage.getItem("userType");
-     
-     if(type === "user") {
-      toast.error("You are not authorized to perform this action.")
-      navigate("/")
-     }
-     if(!token){
-       toast.error("You have to login first to perform this action.");
-       navigate("/login");
-     }
-  } , [])
+    const token = localStorage.getItem("token");
+    const type = localStorage.getItem("userType");
 
+    if (type === "user") {
+      toast.error("You are not authorized to perform this action.");
+      navigate("/");
+    }
+    if (!token) {
+      toast.error("You have to login first to perform this action.");
+      navigate("/login");
+    }
+  }, []);
 
   const [image, setImage] = useState("");
   const [Name, setName] = useState("");
@@ -41,11 +36,14 @@ const AddProduct = () => {
   const [price, setPrice] = useState("");
   const [rating, setRating] = useState("");
   const [colors, setColors] = useState([]);
-  const [sizes, setSizes] = useState([]);
-  
+  const [sizes, setSizes] = useState(
+    Sizes.map((size) => ({ ...size, selected: false })) // Initialize sizes with selected property
+  );
 
   const onsubmit = (e) => {
     e.preventDefault();
+
+    const selectedSizes = sizes.filter((size) => size.selected); // Only include selected sizes
 
     const data = new FormData();
     data.append("image", image);
@@ -56,10 +54,10 @@ const AddProduct = () => {
     data.append("price", price);
     data.append("rating", rating);
     data.append("colors", JSON.stringify(colors));
-    data.append("sizes", JSON.stringify(sizes));
-    
+    data.append("sizes", JSON.stringify(selectedSizes)); // Send selected sizes
+
     const headers = { authorization: localStorage.getItem("token") };
-    
+
     axios
       .post(API_URL + "/add-products", data, { headers })
       .then((res) => {
@@ -78,21 +76,21 @@ const AddProduct = () => {
     setColors([...filtered, { color: color.hex, id: uuidv4() }]);
   };
 
-  
-
-  const chooseSize = (size) => {
-    const filtered = sizes.filter(
-      (selectedsize) => selectedsize.value !== size.value
+  const toggleSizeSelection = (selectedSize) => {
+    const updatedSizes = sizes.map((size) =>
+      size.value === selectedSize.value
+        ? { ...size, selected: !size.selected }
+        : size
     );
-    setSizes([...filtered, size]);
+    setSizes(updatedSizes);
   };
 
     
   return (
     <>
-      <div className="flex items center gap-x-6 mt-10 ml-16">
-          <Link to="/" className="p-2 bg-brown rounded-full w-fit text-white ">
-            <MdKeyboardDoubleArrowLeft size={25} />
+      <div className="flex items center gap-x-3 mt-10 ml-16 xs:ml-3">
+          <Link to="/" className="p-2 bg-brown rounded-full w-fit text-white xs:hidden">
+            <MdKeyboardDoubleArrowLeft size={20} />
           </Link>
           <h1 className=" text-brown sm:text-xl text-3xl font-bold">
             Add Products
@@ -154,24 +152,26 @@ const AddProduct = () => {
               return <option value={option}>{option}</option>;
             })}
         </select>
-        <h1>Choose colors:</h1>
+        <h1>Choose colors</h1>
         <div className="flex flex-wrap  gap-x-20">
           <TwitterPicker onChangeComplete={saveColors} />
           <Colors colors={colors} />
         </div>
-        <h1>Choosee sizes</h1>
-        {Sizes.length > 0 && (
-          <div className="flex gap-x-4 ">
-            {Sizes.map((size) => {
-              return (
-                <div
-                  onClick={() => chooseSize(size)}
-                  className="border-2 border-lightpurple px-3 py-2 rounded-lg"
-                >
-                  {size.value}
-                </div>
-              );
-            })}
+        <h1>Choose sizes</h1>
+        {sizes.length > 0 && (
+          <div className="flex gap-x-4 flex-wrap">
+            {sizes.map((size) => (
+              <div
+                key={size.value}
+                onClick={() => toggleSizeSelection(size)}
+                className={`border-2 px-3 py-2 rounded-lg cursor-pointer ${
+                  size.selected ? "bg-green-200 border-green-500" : "border-gray-400"
+                }`}
+              >
+                {size.value}
+                {size.selected && <span className="ml-2">✔</span>}
+              </div>
+            ))}
           </div>
         )}
         <input
