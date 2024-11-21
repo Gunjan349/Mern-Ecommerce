@@ -7,15 +7,13 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const multer = require('multer');
-const upload = multer({dest:'uploads/'})
+const upload = multer({dest:'uploads/'});
+const bodyParser = require('body-parser');
 
 mongoose.set('strictQuery',false);
 mongoose.connect(process.env.CONNECTION_STRING)
-.then(()=>{console.log('connected to db')})
+.then(()=>{console.log('Connected to db')})
 .catch((err)=>{console.log(err)})
-
-
-const bodyParser = require('body-parser');
 
 const product = require('./controller/productController');
 const user = require('./controller/UserController');
