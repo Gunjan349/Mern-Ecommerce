@@ -113,7 +113,7 @@ const WomenWear = () => {
               data.map((item, index) => {
                 if (item.category === "Women" && item.rating === 5) {
                   return (
-                    <div className="relative h-80 xs:h-56 overflow-hidden group">
+                    <div className="relative h-80 xs:h-56 overflow-hidden group cursor-pointer">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
@@ -123,10 +123,10 @@ const WomenWear = () => {
                         className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 xs:p-2 leading-8 group-hover:right-0 duration-700 text-white"
                         onClick={() => handleProduct(item._id)}
                       >
-                        <div className="content-title text-xl font-bold mb-1 xs:hidden">
+                        <div className="content-title text-xl font-bold mb-1  truncate">
                           {item.Name}
                         </div>
-                        <div className="content-desc leading-6">
+                        <div className="content-desc leading-6 truncate">
                           {item.description}
                         </div>
                         <ReactStars

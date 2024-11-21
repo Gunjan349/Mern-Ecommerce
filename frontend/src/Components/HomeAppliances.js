@@ -114,7 +114,7 @@ const HomeAppliances = () => {
               data.map((item, index) => {
                 if (item.category === "Electronics" && item.rating === 5) {
                   return (
-                    <div className=" relative overflow-hidden group h-80 xs:h-56">
+                    <div className=" relative overflow-hidden group h-80 xs:h-56 cursor-pointer">
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
@@ -124,10 +124,10 @@ const HomeAppliances = () => {
                         className="content-body h-[100%] w-[100%] absolute top-0 -right-[100%]  bg-[#1f3d4738] backdrop-blur-sm rounded-md text-lg p-3 leading-8 group-hover:right-0 duration-700 text-white xs:p-2"
                         onClick={() => handleProduct(item._id)}
                       >
-                        <div className="content-title text-xl font-bold mb-1 xs:hidden">
+                        <div className="content-title text-xl font-bold mb-1  truncate">
                           {item.Name}
                         </div>
-                        <div className="content-desc xs:leading-6">{item.description}</div>
+                        <div className="content-desc xs:leading-6 truncate">{item.description}</div>
                         <ReactStars
                           count={5}
                           size={24}

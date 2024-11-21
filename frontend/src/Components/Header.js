@@ -20,7 +20,7 @@ const Header = () => {
             <h3> xxxxxxxxxx</h3>
           </div>
         </div>
-        <div className="nav-bar py-2 text-brown  px-4 flex items-center border-b sm:border-b-0">
+        <div className="nav-bar py-2 text-brown  px-4 flex items-center border-b">
           <div className="logo-div">
             <h3 className="text-4xl ">nearYou</h3>
           </div>

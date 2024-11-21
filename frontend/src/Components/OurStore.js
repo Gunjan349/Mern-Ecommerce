@@ -8,7 +8,7 @@ const OurStore = () => {
     <>
     
    
-      <div className="our-store flex mt-10">
+      <div className="our-store flex mt-10 overflow-x-hidden">
         <ProductSidebar />
       </div>
     </>

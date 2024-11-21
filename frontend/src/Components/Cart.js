@@ -90,12 +90,6 @@ const Cart = () => {
   return (
     <>
       <div className="">
-        <div className="flex items center gap-x-6 mt-10">
-          
-          <h1 className=" text-brown sm:text-xl text-3xl font-bold mx-16 lg:mx-8">
-            Shopping Cart
-          </h1>
-        </div>
 
         <div className="image-wrapper mx-16 sm:mx-0">
           <div className="cart-content boxes grid  mt-12 grid-cols-2 gap-12 lg:gap-6">

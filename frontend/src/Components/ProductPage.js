@@ -109,7 +109,7 @@ const ProductPage = () => {
   return (
     <>
       <div className="main-product mx-44 mt-10">
-        <div className="mb-24  bg-white p-6 rounded-md grid grid-cols-2 md:grid-cols-1 sm:p-0">
+        <div className="mb-24  bg-white p-6 rounded-md grid grid-cols-2 md:grid-cols-1 sm:px-0 sm:pb-3">
           <div className="product-left border-r-2 border-gray-200 md:border-none ">
             <div className="main-image h-full w-full">
               <img

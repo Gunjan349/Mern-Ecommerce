@@ -142,11 +142,11 @@ const BestSellers = () => {
                         onClick={() => handleProduct(item._id)}
                       />
 
-                      <div className="content-body  ml-6">
+                      <div className="content-body  ml-3">
                         <div className="content-title text-2xl font-bold mb-2 leading-10 lg:leading-7 lg:text-xl">
                           {item.Name}
                         </div>
-                        <div className="content-desc my-2  xs:hidden">
+                        <div className="content-desc my-2 truncate xs:hidden">
                           {item.description}
                         </div>
                         <div className="stars">
