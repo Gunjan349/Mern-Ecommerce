@@ -138,15 +138,15 @@ const BestSellers = () => {
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
-                        className="rounded-md  lg:w-56 h-80"
+                        className="rounded-md  lg:w-56 h-80 xs:h-56"
                         onClick={() => handleProduct(item._id)}
                       />
 
                       <div className="content-body  ml-6">
-                        <div className="content-title text-2xl font-bold mb-3 leading-10 lg:leading-7 lg:text-xl">
+                        <div className="content-title text-2xl font-bold mb-2 leading-10 lg:leading-7 lg:text-xl">
                           {item.Name}
                         </div>
-                        <div className="content-desc my-3  xs:hidden">
+                        <div className="content-desc my-2  xs:hidden">
                           {item.description}
                         </div>
                         <div className="stars">

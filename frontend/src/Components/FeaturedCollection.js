@@ -128,15 +128,15 @@ const FeaturedCollection = () => {
                       <img
                         src={API_URL + `/${item.image}`}
                         alt="img"
-                        className="rounded-md  lg:w-56 h-80"
+                        className="rounded-md  lg:w-56 h-80 xs:h-56"
                         onClick={() => handleProduct(item._id)}
                       />
 
                       <div className="content-body ml-6">
-                        <div className="content-title text-xl font-bold mb-3 md:mb-0 leading-10 lg:leading-7 lg:text-xl">
+                        <div className="content-title text-xl font-bold mb-2 md:mb-0 leading-10 lg:leading-7 lg:text-xl truncate">
                           {item.Name}
                         </div>
-                        <div className="content-desc my-3 lg:my-1 xs:hidden">
+                        <div className="content-desc my-2 lg:my-1 xs:hidden truncate">
                           {item.description}
                         </div>
                         <div className="stars">
